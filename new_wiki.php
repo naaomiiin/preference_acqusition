@@ -28,7 +28,8 @@ function clearString($str){
   return $tmpArray;
   }
 
-// IDFを計算し，次の遷移
+
+# IDFの取得
 function keyword_n($arrayStr, $n){
   $con = mysql_connect('localhost', 'klab', '0nsayken9');
   if (!$con) {
@@ -57,7 +58,7 @@ function keyword_n($arrayStr, $n){
 
     $result = mysql_query($sql);
    // print $sql . "\n";
-while($line =  mysql_fetch_assoc($result)){
+  while($line =  mysql_fetch_assoc($result)){
       array_push($idf_array, $line);
     }
   }
@@ -65,6 +66,7 @@ while($line =  mysql_fetch_assoc($result)){
   foreach($idf_array as $key => $value){
       $key_id[$key] = $value['IDF値'];
   }
+
 
   array_multisort($key_id, SORT_DESC, $idf_array);
   //print $idf_array[0]["単語"];
@@ -74,17 +76,19 @@ while($line =  mysql_fetch_assoc($result)){
   //print $r_idf_array[0]["単語"];
   //print $r_idf_array[0]["IDF値"]."\n";
  
+/*  
   for($i = 0; $i < count($idf_array); $i++){
-  //      print $idf_array[$i]["単語"] . "\t";
-  //      print $idf_array[$i]["IDF値"] . "\n";
+        print $idf_array[$i]["単語"] . "\t";
+        print $idf_array[$i]["IDF値"] . "\n";
   }
+ */
 
-  $file_write = `echo $idf_array[0] > sample.txt`;
-  
+ $file_write = `echo $idf_array[0] > sample.txt`;
+
   $properNoun = exec('echo "'.
              $idf_array[0].
              '"| mecab', $propData);
-
+  
   if(is_array($propData)){  
     for($i = 0; $i < count($propData); $i++){
       $properNoun .= $propData[$i]; 
@@ -131,7 +135,7 @@ function nouns_from_wiki($str){
   if (preg_match('/<text(.*?)<\/text>/s', mb_convert_encoding($wiki_data, 'UTF-8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS'), $result)) {
     $text = $result[0];
     //print $text . "\n";
-    var_dump ( $result );
+    //var_dump ( $result );
  }else{
     // page not found
     return 10001;
@@ -173,9 +177,7 @@ while (1){
       $qStateTemp = "Exit";
   }
 
-// Conduct System
-//  questionState($qStateTemp, $qDataTemp);
-//  print "FIXME";
+
   print " You : ";
   fscanf(STDIN, "%s", $in);
 
@@ -202,56 +204,52 @@ while (1){
               strcmp($replace, "私") != 0 &&
               strcmp($replace, "する") != 0 &&
               strcmp($replace, "こと") != 0
-            )
-          {
+            ){
               array_push($string_Array, $replace);
-          }
+            }
         }
     } else {
       // 名詞確定
       $oneSentence = substr( $in , MECAB_STRING_CUT_LENGTH , strlen($in) - MECAB_STRING_CUT_LENGTH );
     }
 
-    //print $string_Array[0];
     //var_dump($string_Array);
     
-    if ($oneSentence == -1)
-    {
+    if ($oneSentence == -1){
       $bindStrings = "";
       for( $i=0; $i < count($string_Array); $i++){
-       //ユーザが入力した単語を全て表示
-       // print $string_Array[$i]."\n";
-        $bindStrings .= $string_Array[$i];
+         //ユーザが入力した単語を全て表示
+         // print $string_Array[$i]."\n";
+         $bindStrings .= $string_Array[$i];
       }
-     //ユーザが入力した単語に連続する名詞があれば繋げて表示 
-      //print $bindStrings;
 
+
+      //ユーザが入力した単語に連続する名詞があれば繋げて表示 
       $resultCode = nouns_from_wiki($bindStrings);
     }else{
       $resultCode = nouns_from_wiki($oneSentence);
     }
     
-      if($in == "わかりません"){
-
+    if($in == "わかりません"){
         $n++;
         print keyword_n($prev_nouns, $n);
       
-      }elseif(empty($string_Array)){
+    }elseif(empty($string_Array)){
         $n=1;
         //2番目をとってきて出力
         // Systemを遷移する
        	//$qStateTemp = "Error";
 	 //print ("$string_Arrayは0か空です。\n");
-      }elseif($resultCode == 10001){
+    }elseif($resultCode == 10001){
         $n = 1;
         // wikipediaのページが見つからない
         //print("変わった趣味をお持ちのようですね．\n");
-        $nouns = nouns_from_wiki($string_Array[0]);
+        $nouns = nouns_from_wiki($bindStrings);
        	print keyword_n($nouns, 1);
       }else{
         $n = 1;
         // 形態素解析し，次にシステムのとる行動を計算
-        $nouns = nouns_from_wiki($string_Array[0]);
+        $nouns = nouns_from_wiki($bindStrings);
 	$prev_nouns = $nouns;
         print keyword_n($nouns, $n);
         $loopCount ++;
