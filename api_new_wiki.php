@@ -1,4 +1,13 @@
+<html>
+<head><title>PHP TEST</title></head>
+<body>
+
 <?php
+
+//$input_data = $_GET['keyword'];
+//print('入力した値は'.$input_data.'<br>');
+//print('帰ってきた値の型は'.gettype($input_data));
+
 
 // Common
 define('WIKIPEDIA_API_URL', 'http://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%83%87%E3%83%BC%E3%82%BF%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97');
@@ -73,12 +82,6 @@ function keyword_n($arrayStr, $n){
   //print $r_idf_array[0]["単語"];
   //print $r_idf_array[0]["IDF値"]."\n";
  
-/*  
-  for($i = 0; $i < count($idf_array); $i++){
-        print $idf_array[$i]["単語"] . "\t";
-        print $idf_array[$i]["IDF値"] . "\n";
-  }
- */
 
   $properNoun = exec('echo "'.
              $idf_array[0].
@@ -146,18 +149,20 @@ function nouns_from_wiki($str){
   return $tmp_array;
 }
 
-?>
 
 
-<?php
+
 $qStateTemp = "Start";
 $qDataTemp = "";
 $loopCount = 0;
 $n = 1;
 $prev_nouns;
+$input_data = $_GET['keyword'];
 
-print "--------- Start System ---------\n\n";
-print " Sys : あなたの趣味はなんですか？\n";
+//print "--------- Start System ---------\n\n";
+//print " Sys : あなたの趣味はなんですか？\n";
+echo '<p>  Sys : あなたの趣味はなんですか？</p>';
+echo "<p>  You : ${input_data}</p>";
 
 // main point
 while (1){
@@ -173,11 +178,11 @@ while (1){
   }
 
 
-  print " You : ";
-  fscanf(STDIN, "%s", $in);
+//  print " You : ";
+//  fscanf(STDIN, "%s", $in);
 
   // 入力状態を保管
-  switch ($in) {
+  switch ($input_data) {
     case 'exit':
         $qStateTemp = "Exit";
       break;
@@ -185,7 +190,7 @@ while (1){
       default:
 
     $noun = exec('echo '.
-                 $in.
+                 $input_data.
                  '| mecab | grep "名詞" | cut -f 1| uniq -c', $ma);
 
     if (is_array($ma)) {
@@ -205,10 +210,9 @@ while (1){
         }
     } else {
       // 名詞確定
-      $oneSentence = substr( $in , MECAB_STRING_CUT_LENGTH , strlen($in) - MECAB_STRING_CUT_LENGTH );
+      $oneSentence = substr( $input_data , MECAB_STRING_CUT_LENGTH , strlen($input_data) - MECAB_STRING_CUT_LENGTH );
     }
 
-    //var_dump($string_Array);
     
     if ($oneSentence == -1){
       $bindStrings = "";
@@ -228,7 +232,6 @@ while (1){
     if($in == "わかりません"){
         $n++;
         print keyword_n($prev_nouns, $n);
-      
     }elseif(empty($string_Array)){
         $n=1;
         //2番目をとってきて出力
@@ -241,17 +244,20 @@ while (1){
         //print("変わった趣味をお持ちのようですね．\n");
         $nouns = nouns_from_wiki($bindStrings);
        	print keyword_n($nouns, 1);
-      }else{
+    }else{
         $n = 1;
         // 形態素解析し，次にシステムのとる行動を計算
         $nouns = nouns_from_wiki($bindStrings);
 	$prev_nouns = $nouns;
         print keyword_n($nouns, $n);
-        $loopCount ++;
-      }
+       // $loopCount ++;
+    }
 
       break;
   }
-
+break;
 }
 
+?>
+</body>
+</html>

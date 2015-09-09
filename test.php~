@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang = “ja”>
+<head>
+<meta charset = “UFT-8”>
+<title>フォームからデータを受け取る</title>
+</head>
+<body>
+<h1>フォームデータの送信</h1>
+<form action = "api_new_wikix.php"  method = "get">
+<input type = "test"  name = "comment"><br/>
+<input type = "submit" vvalu = "送信">
+</form>
+</body>
+</html>
