@@ -86,8 +86,8 @@ min-height:500px;
 }
  
 .rightmenu {
-background:#fccbff; /* 右カラム背景色 */
-background-image: url("./dot.png");
+//background:#fccbff; /* 右カラム背景色 */
+background-image: url("./dot2.png");
 //background-image: url("http://shinzan.human.waseda.ac.jp/~itonaomi/naomi/css/dot1.png");
  background-repeat: repeat;
  text-align: center;
@@ -248,7 +248,7 @@ body{
  //margin:0;
  //padding:0;
  color:#666;
- background-image: url("dot1.png");
+ background-image: url("dot3.png");
  background-repeat: repeat;
  text-align: center;
 }
