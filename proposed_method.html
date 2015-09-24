@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>対話システム</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/talk.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="chartist/chartist.min.css">
+    <script src="chartist/chartist.min.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <!--  <link href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" rel="stylesheet" type="text/css" />-->
+  </head>
+  <body>
+    <div id="header" background="dot.png">
+    </div>
+    <div class="colmask rightmenu">
+      <div class="container">
+        <div class="row" style="height:500px;">
+          <div class="col-sm-6"> <!-- カラム 1 ここから -->
+            <br>
+            <span id="taiwa_count"></span>
+            <br>
+            <div id="history">
+            </div>
+            <br>
+            <div class="form-group">
+              <label class="sr-only control-label" for="input">Input</label>
+              <input type="text" id="input" class="form-control" placeholder="発言してね">
+            </div>
+            <div class="form-group">
+              <input type="button" id="append-text" value="話す" class="btn btn-primary">
+            </div>
+          </div> <!-- カラム 1 ここまで -->
+
+          <div class="col2 col-sm-6"><!-- カラム 2 ここから -->
+            <div class="tab">
+              <div class="menu active">パーソナリティ</div><!--タブ１-->
+              <div class="content">
+                <br>
+                <font size="3"><p align="center" id="graph_title">ユーザのパーソナリティ</p></font>
+                <font size="1"><p align="left" id="graph_tate">ポジティブと判定された回数</p></font>
+                <div class="row" style="height:380px;">
+                  <div class="col-sm-10">
+                    <div class="ct-chart ct-perfect-fourth" id="chart" style="background-color:#E5E8BB"></div>
+                  </div>
+                  <div class="col-sm-2">
+                    <img src="img/hanrei.png" id="legend">
+                  </div>
+                </div><!--row ここまで-->
+                <font size="1"><p align="right" id="bottom">対話回数</p></font>
+              </div><!--タブ１ここまで-->
+              <div class="menu">対話履歴</div><!--タブ２-->
+              <div class="content" id="rireki">
+                <div id="chat_log"></div>
+              </div> <!--タブ２ここまで-->
+            </div><!--tab ここまで-->
+          </div><!-- カラム 2 ここまで -->
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/talk.js"></script>
+  </body>
+</html>
