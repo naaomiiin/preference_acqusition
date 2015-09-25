@@ -1,8 +1,6 @@
-<html>
-<head><title>PHP TEST</title></head>
-<body>
-
 <?php
+
+header('Content-Type: application/json');
 
 // Common
 define('WIKIPEDIA_API_URL', 'http://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%83%87%E3%83%BC%E3%82%BF%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97');
@@ -299,5 +297,4 @@ while (1){
 }
 
 ?>
-</body>
-</html>
+

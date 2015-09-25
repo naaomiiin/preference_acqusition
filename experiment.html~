@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>実験説明</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="chartist/chartist.min.css">
+    <script src="chartist/chartist.min.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <!--  <link href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" rel="stylesheet" type="text/css" />-->
+  </head>
+  <body>
+    <div id="header" background="dot3.png">
+      <h1>対話システム評価実験 トップページ</h1><br>
+  <h3 id="name">早稲田大学 人間科学部 人間情報科学科 菊池英明研究室 伊藤尚美</h3>
+<br>
+</div>
+    <div class="colmask rightmenu">
+      <div class="container">
+        <div class="row" style="height:500px;">
+          <div class="col-sm-12"> <!-- カラム 1 ここから -->
+  <img src="./img/lace.png" id="left_lace">
+  <img src="./img/lace.png" id="right_lace"> 
+<p>
+    <h4 id="name">実験に御協力いただきありがとうございます. <br><br></h4>
+    <h2>実験に関する合意項目</h2><br>
+   <p id="agreement"> 実験を実施する前に, 実験参加者の皆様と実験者間において以下の点について合意・確認をしたいと思います. <br>
+    1. 実験前に行う説明によって実験内容を了承いただいた場合にのみ実験を開始します. <br>
+    2. 実験に関して不明な点, 不安を感じる点があれば, いつでも実験を取りやめることができます. <br>
+         その場合にも, 被験者に不利益が生じることはありません. <br>
+    3. 実験の遂行に当たり, 被験者の精神や身体に過度の負担があたえられるようなことはありません. <br>
+    4. 実験で得られたデータは研究目的以外では使用しません. また, 個人が特定できるような状態で使用・公開することはありません. <br>
+  </p>
+  <br>
+  <p>
+    <h2>実験説明</h2><br>
+    <h3>1. 実験目的</h3><br>
+    <p class="common">本実験の目的は, ある人物のパーソナリティ(人格)と他者の振る舞いの関係を調査することです. <br></p>
+    <br>
+    <h3>2. 手続き</h3><br>
+    <h4>2.1 環境</h4><br>
+    <p class="common">実験環境の指定は特にありません. <br>
+    極端に集中を乱すことがなければ問題ありません. <br>
+    ただし, 誰かと会話をしながら回答することは避けてください. <br>
+    また, 今回の実験の内容について, 他人に話すことは止めてください. <br>
+    <br></p>
+    <h4>2.2 作業内容</h4><br>
+    <p class="common">具体的な作業内容につきましては次ページ以降で文章による記述かCGキャラクターによる説明があります. <br>
+    詳しくは次ページ以降の文章かCGキャラクターの説明をご確認ください. <br>
+    <br></p>
+    <h4>2.3 結果送信</h4><br>
+    <p class="common">結果は実験が進むにつれ自動的に送信されます. <br>
+    <br></p>
+    <h4>2.4 実験開始</h4><br>
+    <p class="common">本ページ下部にある被験者情報入力フォームに情報を入力し, 「被験者情報登録」ボタンを押すと実験が開始されます. <br>
+    <br></p>
+<h4>2.5 中断について</h4><br>
+    <p class="common">本実験は途中で中断することができません. <br>
+    実験中に放置すると画面遷移時にエラーが出ます. <br>
+    何らかの事情により中断せざるを得なかった場合は<a href="mailto:naoming.s2@gmail.com">伊藤</a>までお知らせください. <br>
+    <br></p>
+    <h4>3. その他注意事項</h4><br>
+    <p class="common">本研究は精神的・肉体的に疲労している状態ではできません. <br>
+    疲労している場合は回復を待って実験を行ってください. <br>
+    ご不明な点がありましたら<a href="mailto:naoming.s2@gmail.com">伊藤</a>までお知らせください. <br>
+    <br></p>
+  </p>
+<div id="form">
+  <form id="register" action="./submit.php" method="POST">
+  <table class="table table-striped container">
+      <tr class="row">
+        <td class="col-sm-3" id="adjustment">氏名  　<input type="text" id="adjustment" name="subject_name" size="20" required></td>
+        <td class="col-sm-3" id="adjustment">年齢  　<input type="number" id="adjustment" name="subject_age" size="20" min="0" required></td>
+        <td class="col-sm-3" id="adjustment">性別  　<select name="subject_sex" id="adjustment" required>
+          <option value="" disabled></option>
+          <option value="男性" id="adjustment">男性</option>
+          <option value="女性" id="adjustment">女性</option>
+        </select></td>
+        <td class="col-sm-3"><button class="btn btn-primary" type="submit" id="adjustment" name="register" onclick="location.href='リンク先url' value="done">被験者情報登録</button></td> 
+     </tr>
+  </table>
+  </form>
+</div>
+           </div> <!-- カラム 1 ここまで -->
+        </div>
+      </div>
+       <div id="buttom" style="height:100px;"> 
+       </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/proposed_method.js"></script>
+  </body>
+</html>

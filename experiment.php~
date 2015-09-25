@@ -1,3 +1,24 @@
+<?php
+
+
+if(isset($_POST['register'])) {
+  $name = $_POST['subject_name'];
+  $age = $_POST['subject_age'];
+  $sex = $_POST['subject_sex'];
+
+
+//$data = 'Y/m/d H:i:s';
+
+$fp = fopen("information.txt", "a");
+fwrite($fp, $name . "," . $age . "," . $sex . "\n");
+fclose($fp);
+
+}
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -6,7 +27,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>実験説明</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/experiment.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <link rel="stylesheet" href="chartist/chartist.min.css">
     <script src="chartist/chartist.min.js"></script>
@@ -14,9 +35,8 @@
   </head>
   <body>
     <div id="header" background="dot3.png">
-      <h1>対話システム評価実験 トップページ</h1><br>
-        <h3 id="name">早稲田大学 人間科学部 人間情報科学科 菊池英明研究室 伊藤尚美</h3>
-        <br>
+      <h1>対話システム評価実験一覧ページ</h1><br>
+      <br>
     </div>
     <div class="colmask rightmenu">
       <div class="container">
@@ -25,7 +45,6 @@
             <img src="./img/lace.png" id="left_lace">
             <img src="./img/lace.png" id="right_lace"> 
             <p>
-            <h4 id="name">実験に御協力いただきありがとうございます. <br><br></h4>
             <h2>実験に関する合意項目</h2><br>
               <p id="agreement"> 実験を実施する前に, 実験参加者の皆様と実験者間において以下の点について合意・確認をしたいと思います. <br>
                 1. 実験前に行う説明によって実験内容を了承いただいた場合にのみ実験を開始します. <br>
@@ -69,7 +88,7 @@
                  <br></p>
           </p>
        <div id="form">
-         <form id="register" action="./experiment.cgi" method="POST">
+         <form id="register" action="./experiment.php" method="POST">
            <table class="table table-striped container">
              <tr class="row">
                <td class="col-sm-3" id="adjustment">氏名  　<input type="text" id="adjustment" name="subject_name" size="20" required></td>
