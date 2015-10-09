@@ -1,33 +1,12 @@
-<?php
-
-
-if(isset($_POST['register'])) {
-  $name = $_POST['subject_name'];
-  $age = $_POST['subject_age'];
-  $sex = $_POST['subject_sex'];
-
-
-//$data = 'Y/m/d H:i:s';
-
-$fp = fopen("information.txt", "a");
-fwrite($fp, $name . "," . $age . "," . $sex . "\n");
-fclose($fp);
-
-}
-
-
-?>
-
-
 <!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>アンケート</title>
+    <title>対話システム３アンケート</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/experiment1.css">
+    <link rel="stylesheet" href="css/experiment3.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <link rel="stylesheet" href="chartist/chartist.min.css">
     <script src="chartist/chartist.min.js"></script>
@@ -45,73 +24,105 @@ fclose($fp);
   <img src="./img/lace2.png" id="left_lace">
   <img src="./img/lace2.png" id="right_lace">
 <p>
-    <h4 id="name">実験に御協力いただきありがとうございます. <br><br></h4>
-    <h2>実験に関する合意項目</h2><br>
-   <p id="agreement"> 実験を実施する前に, 実験参加者の皆様と実験者間において以下の点について合意・確認をしたいと思います. <br>
-    1. 実験前に行う説明によって実験内容を了承いただいた場合にのみ実験を開始します. <br>
-    2. 実験に関して不明な点, 不安を感じる点があれば, いつでも実験を取りやめることができます. <br>
-         その場合にも, 被験者に不利益が生じることはありません. <br>
-    3. 実験の遂行に当たり, 被験者の精神や身体に過度の負担があたえられるようなことはありません. <br>
-    4. 実験で得られたデータは研究目的以外では使用しません. また, 個人が特定できるような状態で使用・公開することはありません. <br>
-  </p>
+   <h3>アンケートに関する説明</h3><br>
+   <p id="agreement"> ここではあなた自身のことと, 対話システム３との対話について, 以下の質問に回答して頂きます. <br> 
+    質問は全部で6問あり, 「1:まったくあてはまらない」から「7:非常にあてはまる」までのいずれかを選択するか,<br>
+    テキストボックスに文章を記述して回答してください. <br>
+    全て回答したらページ下部の回答ボタンを押してトップページに戻ってください. <br> </p>
   <br>
   <p>
-    <h2>実験説明</h2><br>
-    <h3>1. 実験目的</h3><br>
-    <p class="common">本実験の目的は, ある人物のパーソナリティ(人格)と他者の振る舞いの関係を調査することです. <br></p>
-    <br>
-    <h3>2. 手続き</h3><br>
-    <h4>2.1 環境</h4><br>
-    <p class="common">実験環境の指定は特にありません. <br>
-    極端に集中を乱すことがなければ問題ありません. <br>
-    ただし, 誰かと会話をしながら回答することは避けてください. <br>
-    また, 今回の実験の内容について, 他人に話すことは止めてください. <br>
-    <br></p>
-    <h4>2.2 作業内容</h4><br>
-    <p class="common">具体的な作業内容につきましては次ページ以降で文章による記述かCGキャラクターによる説明があります. <br>
-    詳しくは次ページ以降の文章かCGキャラクターの説明をご確認ください. <br>
-    <br></p>
-    <h4>2.3 結果送信</h4><br>
-    <p class="common">結果は実験が進むにつれ自動的に送信されます. <br>
-    <br></p>
-    <h4>2.4 実験開始</h4><br>
-    <p class="common">本ページ下部にある被験者情報入力フォームに情報を入力し, 「被験者情報登録」ボタンを押すと実験が開始されます. <br>
-    <br></p>
-<h4>2.5 中断について</h4><br>
-    <p class="common">本実験は途中で中断することができません. <br>
-    実験中に放置すると画面遷移時にエラーが出ます. <br>
-    何らかの事情により中断せざるを得なかった場合は<a href="mailto:naoming.s2@gmail.com">伊藤</a>までお知らせください. <br>
-    <br></p>
-    <h4>3. その他注意事項</h4><br>
-    <p class="common">本研究は精神的・肉体的に疲労している状態ではできません. <br>
-    疲労している場合は回復を待って実験を行ってください. <br>
-    ご不明な点がありましたら<a href="mailto:naoming.s2@gmail.com">伊藤</a>までお知らせください. <br>
-    <br></p>
-  </p>
-<div id="form">
-  <form id="register" action="./submit.php" method="POST">
-  <table class="table table-striped container">
-      <tr class="row">
-        <td class="col-sm-3" id="adjustment">氏名  　<input type="text" id="adjustment" name="subject_name" size="20" required></td>
-        <td class="col-sm-3" id="adjustment">年齢  　<input type="number" id="adjustment" name="subject_age" size="20" min="0" required></td>
-        <td class="col-sm-3" id="adjustment">性別  　<select name="subject_sex" id="adjustment" required>
-          <option value="" disabled></option>
-          <option value="男性" id="adjustment">男性</option>
-          <option value="女性" id="adjustment">女性</option>
-        </select></td>
-        <td class="col-sm-3"><button class="btn btn-primary" type="submit" id="adjustment" name="register" onclick="location.href='リンク先url' value="done">被験者情報登録</button></td>                                                                                                                                                                                                                                              
-     </tr>                                                                                                                                                                                                                                                                                                                                                                                                                             
-  </table>                                                                                                                                                                                                                                                                                                                                                                                                                             
-  </form>                                                                                                                                                                                                                                                                                                                                                                                                                              
-</div>                                                                                                                                                                                                                                                                                                                                                                                                                                 
-           </div> <!-- カラム 1 ここまで -->                                                                                                                                                                                                                                                                                                                                                                                           
-        </div>                                                                                                                                                                                                                                                                                                                                                                                                                         
-      </div>                                                                                                                                                                                                                                                                                                                                                                                                                           
-       <div id="buttom" style="height:100px;">                                                                                                                                                                                                                                                                                                                                                                                         
-       </div>                                                                                                                                                                                                                                                                                                                                                                                                                          
-    </div>                                                                                                                                                                                                                                                                                                                                                                                                                             
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>                                                                                                                                                                                                                                                                                                                                          
-    <script src="js/bootstrap.min.js"></script>                                                                                                                                                                                                                                                                                                                                                                                        
-    <script src="js/proposed_method.js"></script>                                                                                                                                                                                                                                                                                                                                                                                      
-  </body>                                                                                                                                                                                                                                                                                                                                                                                                                              
-</html>                     
+   <form id="subject_personality" action="experiment3.cgi" method="POST">
+          <table class="table table-striped container" style="width:1200px;">
+        
+          <tr class="row">
+            <th class="col-sm-5">質問</th>
+            <th class="col-sm-1">1: まったくあてはまらない</th>
+            <th class="col-sm-1">2: ほとんどあてはまらない</th>
+            <th class="col-sm-1">3: あまりあてはまらない</th>
+            <th class="col-sm-1">4: どちらとも言えない</th>
+            <th class="col-sm-1">5: ややあてはまる</th>
+            <th class="col-sm-1">6: かなりあてはまる</th>
+            <th class="col-sm-1">7: 非常にあてはまる</th>
+          </tr>
+        
+	  <tr class="row">
+            <td class="col-xs-5 col-sm-5 col-md-5 col-lg-5">1. あなたは対話で用いた趣味について豊富な知識を持っている</td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="01_1"><input id="01_1" type="radio" name="01_question" value="1" required>1</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="01_2"><input id="01_2" type="radio" name="01_question" value="2">2</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="01_3"><input id="01_3" type="radio" name="01_question" value="3">3</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="01_4"><input id="01_4" type="radio" name="01_question" value="4">4</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="01_5"><input id="01_5" type="radio" name="01_question" value="5">5</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="01_6"><input id="01_6" type="radio" name="01_question" value="6">6</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="01_7"><input id="01_7" type="radio" name="01_question" value="7">7</label></td>
+          </tr>
+          <tr class="row">
+            <td class="col-xs-5 col-sm-5 col-md-5 col-lg-5">2. システムは対話で用いた趣味について豊富な知識を持っている</td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="02_1"><input id="02_1" type="radio" name="02_question" value="1" required>1</label></td> 
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="02_2"><input id="02_2" type="radio" name="02_question" value="2">2</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="02_3"><input id="02_3" type="radio" name="02_question" value="3">3</label></td> 
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="02_4"><input id="02_4" type="radio" name="02_question" value="4">4</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="02_5"><input id="02_5" type="radio" name="02_question" value="5">5</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="02_6"><input id="02_6" type="radio" name="02_question" value="6">6</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="02_7"><input id="02_7" type="radio" name="02_question" value="7">7</label></td>
+          </tr>
+          <tr class="row">
+            <td class="col-xs-5 col-sm-5 col-md-5 col-lg-5">3. 今後もこのシステムと対話をしたい</td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="03_1"><input id="03_1" type="radio" name="03_question" value="1" required>1</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="03_2"><input id="03_2" type="radio" name="03_question" value="2">2</label></td> 
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="03_3"><input id="03_3" type="radio" name="03_question" value="3">3</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="03_4"><input id="03_4" type="radio" name="03_question" value="4">4</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="03_5"><input id="03_5" type="radio" name="03_question" value="5">5</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="03_6"><input id="03_6" type="radio" name="03_question" value="6">6</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="03_7"><input id="03_7" type="radio" name="03_question" value="7">7</label></td>
+          </tr>
+          <tr class="row">
+            <td class="col-xs-5 col-sm-5 col-md-5 col-lg-5">4. システムとの対話をもっと長く続けたい</td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="04_1"><input id="04_1" type="radio" name="04_question" value="1" required>1</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="04_2"><input id="04_2" type="radio" name="04_question" value="2">2</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="04_3"><input id="04_3" type="radio" name="04_question" value="3">3</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="04_4"><input id="04_4" type="radio" name="04_question" value="4">4</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="04_5"><input id="04_5" type="radio" name="04_question" value="5">5</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="04_6"><input id="04_6" type="radio" name="04_question" value="6">6</label></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><label for="04_7"><input id="04_7" type="radio" name="04_question" value="7">7</label></td>
+          </tr>
+         </table>
+	 <br><br>
+	 <table class="table table-striped container" style="width:1200px;">
+	 <tr class="row">
+            <td id="question_5" class="col-xs-5 col-sm-5 col-md-5 col-lg-5">5. 設問2に対してなぜそう感じたのか</td>
+	    <td><textarea  id="text_5" class="col-xs-7 col-sm-7 col-md-7 col-lg-7" name="05_question"></textarea></td>
+    	 </tr>
+	 <tr class="row">
+            <td id="question_6" class="col-xs-5 col-sm-5 col-md-5 col-lg-5">6. 設問3,4に対してなぜそう感じたのか</td>
+            <td><textarea id="text_6" class="col-xs-7 col-sm-7 col-md-7 col-lg-7" name="06_question"></textarea></td>
+         </tr>
+         </table>
+	 <br><br>
+         <table class="table table-striped container">
+           <tr class="row">
+             <td class="col-md-4" id="adjustment">被験者番号（半角数字)  　<input type="text" id="adjustment" name="subject_name" size="20" required></td>
+             <td class="col-md-4" id="adjustment">年齢  　<input type="number" id="adjustment" name="subject_age" size="20" min="0" required></td>
+             <td class="col-md-4" id="adjustment">性別  　<select name="subject_sex" id="adjustment" required>
+                 <option value="" disabled></option>
+                 <option value="男性" id="adjustment">男性</option>
+                 <option value="女性" id="adjustment">女性</option>
+             </select></td>
+           </tr>
+         </table>
+
+
+       <div> <td class="col-sm-3"><button class="btn btn-primary" type="submit" id="adjustment" name="register" value="done">送信</button></div> 
+       <br>
+    </form>                                                                                                                                                                                                                                                  
+ </div>
+</p>
+ </div> <!-- カラム 1 ここまで -->
+</div>
+</div>
+ <div id="buttom" style="height:100px;">
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,8 +1,6 @@
-<html>
-<head><title>PHP TEST</title></head>
-<body>
-
 <?php
+
+header('Content-Type: application/json');
 
 // Common
 define('WIKIPEDIA_API_URL', 'http://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%83%87%E3%83%BC%E3%82%BF%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97');
@@ -56,7 +54,7 @@ function get_IDF_return($ret_array, $n){
 
   foreach($ret_array as $value){
     $word = rtrim($value,"\n");
-    $sql = "SELECT *  FROM idf WHERE IDF値 > '3' and 単語 = '$word';";        //idf値が3以上のデータ抽出
+    $sql = "SELECT *  FROM idf WHERE 単語 = '$word';";
     $result = mysql_query($sql);
   
   while($line =  mysql_fetch_assoc($result)){
@@ -69,7 +67,8 @@ function get_IDF_return($ret_array, $n){
   }
 
  if(is_array($value)){
-     array_multisort($key_id, SORT_DESC, $mysql_data_array);
+
+    array_multisort($key_id, SORT_DESC, $mysql_data_array);
     //print $mysql_data_array[0]["単語"];
     //print $mysql_data_array[0]["IDF値"]."\n";
 
@@ -77,16 +76,15 @@ function get_IDF_return($ret_array, $n){
     //print $r_mysql_data_array[0]["単語"];
     //print $r_mysql_data_array[0]["IDF値"]."\n";
 
-
 /*
-  for($i = 0; $i < count($r_mysql_data_array); $i++){
+  for($i = 0; $i < count($mysql_data_array); $i++){
         print $mysql_data_array[$i]["単語"] . "\t";
         print $mysql_data_array[$i]["IDF値"] . "\n";
   }
-*/
+ */
 
     $properNoun = exec('echo "'.
-                       $r_mysql_data_array[0].
+                       $mysql_data_array[0].
                        '"| mecab', $propData);
 
     if(is_array($propData)){
@@ -102,53 +100,65 @@ function get_IDF_return($ret_array, $n){
 
     $index = $n - 1;
 
-
-function filter2( $var ) {
-    return ( $var >= 2 ) ? TRUE : FALSE;
-}
-
+ if(isset($mysql_data_array[$index]["単語"])){
     if(strstr($properNoun, $comparePropernoun)){
       // 固有名詞かどうか
+      $result = Array();
       for($i = 0; $i < $number; $i++){
-          print $r_mysql_data_array[$i]["単語"] . "についてどう思いますか？";
+        $count = count($mysql_data_array)-1;
+        $c = $count/2+$i;
+
+	//print $mysql_data_array[$c]["単語"] . "についてどう思いますか？";
       
-          $reply = $r_mysql_data_array[$i]["単語"] . "についてどう思いますか？";
-          $noun = $r_mysql_data_array[$i]["単語"];
-          $idf = floatval($r_mysql_data_array[$i]["IDF値"]);    
+        $reply = $mysql_data_array[$c]["単語"] . "についてどう思いますか？";
+        $noun = $mysql_data_array[$c]["単語"];
+        $idf = floatval($mysql_data_array[$c]["IDF値"]);    
       
-          $json_array= array(
-            'reply'=> $reply,
-            'noun'=> $noun,
-            'idf'=> $idf,
-            'condition' => 'ok'
-          );
-          print json_encode($json_array);      
-        }
+        $json_array= array(
+          'reply'=> $reply,
+          'noun'=> $noun,
+          'idf'=> $idf,
+          'condition' => 'ok'
+        );
+        //print json_encode($json_array);      
+	array_push($result,$json_array);
+      }
+    print json_encode($result);
+
     }elseif(strstr($properNoun, $compareNoun)){
       // 一般名詞かどうか
+      $result = Array();
       for($i = 0; $i < $number; $i++){
-
-          print "好きな" . $r_mysql_data_array[$i]["単語"] . "は何ですか？";
+      $count = count($mysql_data_array)-1;
+      $c = $count/2+$i;
+        //print "好きな" . $mysql_data_array[$c]["単語"] . "は何ですか？";
       
-          $reply = "好きな" . $r_mysql_data_array[$i]["単語"] . "は何ですか？";
-          $noun = $r_mysql_data_array[$i]["単語"];
-          $idf = floatval($r_mysql_data_array[$i]["IDF値"]);
+        $reply = "好きな" . $mysql_data_array[$c]["単語"] . "は何ですか？";
+        $noun = $mysql_data_array[$c]["単語"];
+        $idf = floatval($mysql_data_array[$c]["IDF値"]);
       
-          $json_array= array(
-            'reply'=> $reply,
-            'noun'=> $noun,
-            'idf'=> $idf,
-            'condition' => 'ok'
-          );
-          print json_encode($json_array);            
-        }
+        $json_array= array(
+          'reply'=> $reply,
+          'noun'=> $noun,
+          'idf'=> $idf,
+          'condition' => 'ok'
+        );
+        //print json_encode($json_array);            
+	array_push($result,$json_array);
+      }
+       print json_encode($result);
     }else{
       //return "そうなんですね。\n       他の趣味はありますか？\n";
+      $result = Array();
       $json_array= array(
            'condition' => 'no wikipedia'
       );
-      return json_encode($json_array);
+      //return json_encode($json_array);
+      array_push($result,$json_array);
     }
+   }else{
+    return " Sys : そうなんですね。\n       他の趣味はありますか？\n";
+   }
   }
 }
 
@@ -171,24 +181,29 @@ function nouns_from_wiki($str){
   // encode raw data
   $wiki_data_encode = mb_detect_encoding( $wiki_data );
 
-  // text tag
+   // text tag
   if (preg_match('/<text(.*?)<\/text>/s', mb_convert_encoding($wiki_data, 'UTF-8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS'), $result)) {
     $text = $result[0];
-    //print $text . "\n";
-  }else{
-    // page not found
-    return 10001;
-  }
-
-  $noun = exec('echo "'.
+    $noun = exec('echo "'.
                $text.
              '"| mecab | grep "名詞" | cut -f 1| sort | uniq -c | sort -n', $ma);
-  //var_dump($ma);
 
   // Only Japanese
   $tmp_array = clearString($ma);
   return $tmp_array;
+
+ }else{
+    // page not found
+    $noun = exec('echo "'.
+           $str.
+             '"| mecab | grep "名詞" | cut -f 1 | sort | uniq -c | sort -n', $ma);
+
+  $tmp_array = clearString($ma);
+  return $tmp_array;
+
+  }
 }
+
 
 
 
@@ -282,17 +297,25 @@ while (1){
 
     if(empty($string_Array)){    //名詞が抽出できない場合
         $n=1;
-        $json_array= array(
+        $result=array();
+	$json_array= array(
             'condition' => 'error'
         );
-        print json_encode($json_array);
+        //print json_encode($json_array);
+	array_push($result,$json_array);
+	print json_encode($result);
     }elseif(nouns_from_wiki($bindStrings) == 10001){    // wikipediaのページが見つからない場合
-        $n = 1;
-        $json_array= array(
-            'condition' => 'no wikipedia'
-        );
-        print json_encode($json_array);
-    }else{     // 次にシステムのとる行動を計算
+        if (isset($prev_nouns) ) {
+           $n++;
+	   $result=array();
+	   array_push($result,$json_array);
+           print json_encode($result);
+           print get_IDF_return($prev_nouns, $n);
+        }else{
+           $n++;
+        }
+
+   }else{     // 次にシステムのとる行動を計算
         $n = 1;
         $nouns = nouns_from_wiki($bindStrings);
 	//$prev_nouns = $nouns;
@@ -305,5 +328,4 @@ while (1){
 }
 
 ?>
-</body>
-</html>
+

@@ -1,6 +1,9 @@
 @charset "UTF-8";
 .container{margin: 0 auto;}
-    
+#question_5,#question_6{
+  padding-top:25px;
+}
+
 h2{
   background-image: url("./dot5.png");
   width:400px;
@@ -12,10 +15,19 @@ h2{
   text-align: left;
   margin-left: 180px;
 }
+.col-md-5{
+  text-align: left;
+  margin: 10px;
+}
+
 h3{
   text-align: left;
   margin-left: 120px;
 }
+div.col-sm-12{
+  padding-top:30px;
+}
+
 h4{
   text-align: left;
   margin-left: 190px;
@@ -28,18 +40,21 @@ h4{
   text-align: center;
   margin-left: -20px;
 }
-#left_lace{
-  width:720px;
-  height:80px;
-  margin-left: 560px;
-  margin-top: -30px;
-}
 #right_lace{
   width:720px;
   height:80px;
-  margin-left: -705px;
-  margin-top: -100px;
+  margin-left: -10px;
+  margin-top: -60px;
+  position: absolute;
 }
+#left_lace{
+  width:720px;
+  height:80px;
+  margin-left: -710px;
+  margin-top: -60px;
+  position: absolute;
+}
+
 #form{
   background-image: url("./dot5.png");
   width:1422px;

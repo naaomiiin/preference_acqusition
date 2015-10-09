@@ -1,24 +1,3 @@
-<?php
-
-
-if(isset($_POST['register'])) {
-  $name = $_POST['subject_name'];
-  $age = $_POST['subject_age'];
-  $sex = $_POST['subject_sex'];
-
-
-//$data = 'Y/m/d H:i:s';
-
-$fp = fopen("information.txt", "a");
-fwrite($fp, $name . "," . $age . "," . $sex . "\n");
-fclose($fp);
-
-}
-
-
-?>
-
-
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -42,15 +21,16 @@ fclose($fp);
       <div class="container">
         <div class="row" style="height:600px;">
           <div class="col-sm-12"> <!-- カラム 1 ここから -->
-            <img src="./img/lace.png" id="left_lace">
-            <img src="./img/lace.png" id="right_lace"> 
-            <h2><a href="proposed_method.html">対話システム１</a></h2><br>
-            <h2><a href="experiment1.php">対話システム１アンケート</a></h2><br>
-            <h2><a href="ntt_proposed_method.html">対話システム２</a></h2><br>
-      	    <h2><a href="experiment2.php">対話システム２アンケート</a></h2><br>
-            <h2><a href="compare_method.html">対話システム３</a></h2><br>
-      	    <h2><a href="experiment3.php">対話システム３アンケート</a></h2><br>    
-          </div>
+	    <span>
+              <img src="./img/lace.png" id="left_lace">
+              <img src="./img/lace.png" id="right_lace"> 
+            </span>
+	    <div id="h2_top">
+	      <h2><a href="proposed_method.html">対話システム１</a></h2><br>
+              <h2><a href="ntt_proposed_method.html">対話システム２</a></h2><br>
+              <h2><a href="compare_method.html">対話システム３</a></h2><br>
+            </div>
+	  </div>
         </div> <!-- カラム 1 ここまで -->
       </div>
     </div>

@@ -1,0 +1,28 @@
+<?php
+
+$user = "";
+$system = "";
+$information = "";
+$name="";
+
+$information = $_SERVER['REMOTE_ADDR'];
+
+if (isset($_POST['user'])) {
+  $user = $_POST['user'];
+}
+
+if (isset($_POST['system'])) {
+  $system = $_POST['system'];
+}
+
+if (isset($_POST['name'])) {
+  $name = $_POST['name'];
+}
+
+
+$fp = fopen("result.csv", "a");
+fwrite($fp, $name . ",system3," . $user . "," . $system . "\n");
+fclose($fp);
+echo $user . "," . $system . "\n";
+
+?>

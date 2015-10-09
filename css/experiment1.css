@@ -1,8 +1,22 @@
 @charset "UTF-8";
 .container{margin: 0 auto;}
-    
+
+#text_5,#text_6 {
+  height: 5em;
+  width: 98%;
+}
+#question_5,#question_6{
+  padding-top: 35px;
+}  
+.col-md-5{
+  text-align: left;
+  margin: 10px;
+}  
+div.col-sm-12{
+  padding-top:30px;
+}
 h3{
-  background-image: url("./dot5.png");
+  background-image: url("./dot1.png");
   width:400px;
   height:50px;
   padding-top:12px;
@@ -25,25 +39,28 @@ h4{
   text-align: center;
   margin-left: -20px;
 }
-#left_lace{
-  width:720px;
-  height:80px;
-  margin-left: 560px;
-  margin-top: -30px;
-}
 #right_lace{
   width:720px;
   height:80px;
-  margin-left: -705px;
-  margin-top: -100px;
+  margin-left: -10px;
+  margin-top: -60px;
+  position: absolute;
 }
+#left_lace{
+  width:720px;
+  height:80px;
+  margin-left: -710px;
+  margin-top: -60px;
+  position: absolute;
+}
+
 #form{
-  background-image: url("./dot5.png");
+  background-image: url("./dot1.png");
   width:1422px;
   margin-left: -145px;
 }
 .col-sm-3{
-  background-image: url("./dot5.png");
+  background-image: url("./dot1.png");
   height:100px;
 }
 #adjustment{
@@ -140,7 +157,7 @@ min-height:500px;
  
 .rightmenu {
 //background:#fccbff; /* 右カラム背景色 */
-background-image: url("./dot4.png");
+background-image: url("./dot.png");
 //background-image: url("http://shinzan.human.waseda.ac.jp/~itonaomi/naomi/css/dot1.png");
  background-repeat: repeat;
  text-align: center;
@@ -153,7 +170,7 @@ background-image: url("./dot4.png");
 //position:relative;
 //right:100%;
 background:#cbe6ff; /* 左カラム背景色 */
-background-image: url("dot5.png");
+background-image: url("dot1.png");
  background-repeat: repeat;
  text-align: center;
 }
@@ -301,7 +318,7 @@ body{
  //margin:0;
  //padding:0;
  color:#666;
- background-image: url("dot5.png");
+ background-image: url("dot1.png");
  background-repeat: repeat;
  text-align: center;
 }

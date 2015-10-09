@@ -6,6 +6,7 @@ $query = new CGI;
 $name = $query->param('subject_name');
 $age = $query->param('subject_age');
 $sex = $query->param('subject_sex');
+$information = $ENV{'REMOTE_ADDR'};
 #------------------HTMLの表示------------------  
 print "Content-type:text/html\n\n";
 print << "EOF";
@@ -21,38 +22,39 @@ print << "EOF";
     <link rel="stylesheet" href="chartist/chartist.min.css">
     <script src="chartist/chartist.min.js"></script>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-  </head>
-  <body>
+    </head>
+    <body>
     <div id="header" background="dot3.png">
-      <h1>対話システム評価実験一覧ページ</h1><br>
-      <br>
+    <h1>対話システム評価実験一覧ページ</h1><br>
+    <br>
     </div>
     <div class="colmask rightmenu">
-      <div class="container">
-        <div class="row" style="height:500px;">
-          <div class="col-sm-12"> <!-- カラム 1 ここから -->
-            <img src="./img/lace.png" id="left_lace">
-            <img src="./img/lace.png" id="right_lace">
-            <h2><a href="proposed_method.html">対話システム１</a></h2><br>
-            <h2><a href="experiment1.php">対話システム１アンケート</a></h2><br>
-            <h2><a href="ntt_proposed_method.html">対話システム２</a></h2><br>
-            <h2><a href="experiment2.php">対話システム２アンケート</a></h2><br>
-            <h2><a href="compare_method.html">対話システム３</a></h2><br>
-            <h2><a href="experiment3.php">対話システム３アンケート</a></h2><br>
-          </div>
-        </div> <!-- カラム 1 ここまで -->
-      </div>
+    <div class="container">
+    <div class="row" style="height:600px;">
+    <div class="col-sm-12"> <!-- カラム 1 ここから -->
+    <span>
+    <img src="./img/lace.png" id="left_lace">
+    <img src="./img/lace.png" id="right_lace">
+    </span>
+    <div id="h2_top">
+    <h2><a href="proposed_method.html">対話システム１</a></h2><br>
+    <h2><a href="ntt_proposed_method.html">対話システム２</a></h2><br>
+    <h2><a href="compare_method.html">対話システム３</a></h2><br>
     </div>
-      <div id="buttom" style="height:100px;">
-      </div>
-  </div>
+    </div>
+    </div> <!-- カラム 1 ここまで -->
+    </div>
+    </div>
+    <div id="buttom" style="height:100px;">
+    </div>
+    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-</body>
+    </body>
 </html>
 EOF
 #------------------結果をファイルに保存する------------------ 
 $filename="personality.csv";
 open(OUT, ">>", $filename);
-print OUT $name, ",",$age,"," ,$sex,"\n";
+print OUT $information,"\n",$name,",",$age,",",$sex,"\n\n";
 close(OUT);

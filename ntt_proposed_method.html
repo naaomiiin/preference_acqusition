@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>対話システム２</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/talk.css">
+    <link rel="stylesheet" href="css/ntt_proposed_method.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <link rel="stylesheet" href="chartist/chartist.min.css">
     <script src="chartist/chartist.min.js"></script>
@@ -21,26 +21,49 @@
       <div class="container">
         <div class="row" style="height:500px;">
           <div class="col-sm-12"> <!-- カラム 1 ここから -->
-            <br>
+            <p id="show_button">
+              <a href="experiment.php" id="back_page" class="a_demo_four">　　一覧ページへ</a>
+            </p>
+            <p id="hide" style="display: none;">
+              <a href="experiment2.php" class="a_demo_four">アンケートページへ</a>
+            </p>
+	    <br><br>
             <span id="taiwa_count"></span>
-            <br>
+            <br><br>
             <div id="history">
+            <div class="row">
+              <div class="blank col-sm-3">
+              </div>
+              <div class="arrow_answer col-sm-6" style="height:60px";>
+                <br>
+                <a id="first_system">あなたの趣味は何ですか？</a>
+              </div>
+              <div class="col-sm-3">
+                <img src="img/pc.png" alt="システム" class="icon">
+              </div>
             </div>
             <br>
-            <div class="form-group container" style="width:700px;">
+            </div>
+          </div>
+            <br>
+	    <div class="form-group container" style="width:700px;">
               <label class="sr-only control-label" for="input">Input</label>
-              <input type="text" id="input" class="form-control" placeholder="発言してね" style="margin:10px">
+              <input type="text" id="your_name" name="your_name" class="form-control" placeholder="被験者番号（半角数字" style="margin:10px">
+              <input type="text" id="input" name="input" class="form-control" placeholder="発言してね" style="margin:10px">
             </div>
             <div class="form-group">
               <input type="button" id="append-text" value="話す" class="btn btn-primary">
             </div>
-          </div> <!-- カラム 1 ここまで -->
+            <input type="hidden" id="name" name="name">
+            <input type="hidden" id="noun" name="noun">
+        </div> <!-- カラム 1 ここまで -->
 
-        </div>
       </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/ntt_proposed_method.js"></script>
-  </body>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/ntt_proposed_method.js"></script>
+</body>
 </html>
+

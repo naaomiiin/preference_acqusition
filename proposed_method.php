@@ -100,8 +100,10 @@ function get_IDF_return($ret_array, $n){
 
     $index = $n - 1;
 
+ if(isset($mysql_data_array[$index]["単語"])){
     if(strstr($properNoun, $comparePropernoun)){
       // 固有名詞かどうか
+      $result = Array();
       for($i = 0; $i < $number; $i++){
         //print $mysql_data_array[$i]["単語"] . "についてどう思いますか？";
       
@@ -115,10 +117,14 @@ function get_IDF_return($ret_array, $n){
           'idf'=> $idf,
           'condition' => 'ok'
         );
-        print json_encode($json_array);      
-      } 
+        //print json_encode($json_array);      
+	array_push($result,$json_array);
+      }
+    print json_encode($result);
+
     }elseif(strstr($properNoun, $compareNoun)){
       // 一般名詞かどうか
+      $result = Array();
       for($i = 0; $i < $number; $i++){
         //print "好きな" . $mysql_data_array[$i]["単語"] . "は何ですか？";
       
@@ -132,15 +138,22 @@ function get_IDF_return($ret_array, $n){
           'idf'=> $idf,
           'condition' => 'ok'
         );
-        print json_encode($json_array);            
+        //print json_encode($json_array);            
+	array_push($result,$json_array);
       }
+       print json_encode($result);
     }else{
       //return "そうなんですね。\n       他の趣味はありますか？\n";
+      $result = Array();
       $json_array= array(
            'condition' => 'no wikipedia'
       );
-      return json_encode($json_array);
+      //return json_encode($json_array);
+      array_push($result,$json_array);
     }
+   }else{
+    return " Sys : そうなんですね。\n       他の趣味はありますか？\n";
+   }
   }
 }
 
@@ -163,24 +176,29 @@ function nouns_from_wiki($str){
   // encode raw data
   $wiki_data_encode = mb_detect_encoding( $wiki_data );
 
-  // text tag
+   // text tag
   if (preg_match('/<text(.*?)<\/text>/s', mb_convert_encoding($wiki_data, 'UTF-8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS'), $result)) {
     $text = $result[0];
-    //print $text . "\n";
-  }else{
-    // page not found
-    return 10001;
-  }
-
-  $noun = exec('echo "'.
+    $noun = exec('echo "'.
                $text.
              '"| mecab | grep "名詞" | cut -f 1| sort | uniq -c | sort -n', $ma);
-  //var_dump($ma);
 
   // Only Japanese
   $tmp_array = clearString($ma);
   return $tmp_array;
+
+ }else{
+    // page not found
+    $noun = exec('echo "'.
+           $str.
+             '"| mecab | grep "名詞" | cut -f 1 | sort | uniq -c | sort -n', $ma);
+
+  $tmp_array = clearString($ma);
+  return $tmp_array;
+
+  }
 }
+
 
 
 
@@ -274,17 +292,25 @@ while (1){
 
     if(empty($string_Array)){    //名詞が抽出できない場合
         $n=1;
-        $json_array= array(
+        $result=array();
+	$json_array= array(
             'condition' => 'error'
         );
-        print json_encode($json_array);
+        //print json_encode($json_array);
+	array_push($result,$json_array);
+	print json_encode($result);
     }elseif(nouns_from_wiki($bindStrings) == 10001){    // wikipediaのページが見つからない場合
-        $n = 1;
-        $json_array= array(
-            'condition' => 'no wikipedia'
-        );
-        print json_encode($json_array);
-    }else{     // 次にシステムのとる行動を計算
+        if (isset($prev_nouns) ) {
+           $n++;
+	   $result=array();
+	   array_push($result,$json_array);
+           print json_encode($result);
+           print get_IDF_return($prev_nouns, $n);
+        }else{
+           $n++;
+        }
+
+   }else{     // 次にシステムのとる行動を計算
         $n = 1;
         $nouns = nouns_from_wiki($bindStrings);
 	//$prev_nouns = $nouns;
