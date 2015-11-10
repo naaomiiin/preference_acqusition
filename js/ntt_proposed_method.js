@@ -24,8 +24,9 @@ $("#append-text").click(function(){
     systemReply = "そうなんですね。他の趣味はありますか？";
     taiwa_counter++;
     $('#history').animate({ scrollTop: ($('#history')[0].scrollHeight) }, 'slow');  //自動スクロール
-//    console.log(number);
     if($("#input").val()==="わかりません"){
+	for (number=number ; number<=10 ; number++){
+        }
 	number++;
 	sentence = $(':hidden[name="noun"]').val();
     }else if($("#input").val()===""){

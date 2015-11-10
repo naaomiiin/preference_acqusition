@@ -5,7 +5,7 @@ var taiwa_counter=0;
 var append_counter=0;
 var number=1;
 
-$(document).ready(function() {
+$(document).ready(function() {      //enter key 無効
     $("input[type='text']").keypress(function(ev) {
 	if ((ev.which && ev.which === 13) || (ev.keyCode && ev.keyCode === 13)) {
 	    return false;
@@ -54,6 +54,7 @@ $("#append-text").click(function(){
 	dataType:"json",
 	success: function(data){
 	    console.log("成功");
+	    number++;
 	    systemReply = data.reply;
 	    console.log(data[data.length - 1]);
 	    idf = data[data.length - 1].idf;
@@ -64,7 +65,6 @@ $("#append-text").click(function(){
 	    }else if($("#input").val()===""){
                 systemReply = "何か入力してください";
 	    }else{
-                //systemReply = data.triple[2].text;                                                                                                                                                                                                      
 		systemReply = "そうなんですね。他の趣味はありますか？";
 	    }
 	},
