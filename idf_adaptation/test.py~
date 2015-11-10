@@ -1,0 +1,48 @@
+import numpy as np
+
+x=10
+
+known   = np.array([1,2,3,4,5])
+unknown = np.array([4,5,6,7,8])
+
+
+"""
+わかる場合
+"""
+
+def known_value():
+    v = [np.var(known), np.mean(known)]
+    y = (1./np.sqrt(2*np.pi*v[0])) * np.exp(-(x - v[1])**2/2/v[0])
+    print "known=>",y
+
+
+
+"""
+わからない場合
+"""
+
+def unknown_value():
+    v = [np.var(unknown), np.mean(unknown)]
+    y = (1./np.sqrt(2*np.pi*v[0])) * np.exp(-(x - v[1])**2/2/v[0])
+    print "unknown=>",y
+
+
+"""
+比較して大きい方を表示
+"""
+print known_value,",,,,",unknown_value
+
+
+
+
+"""
+sigmas = [0.2, 1.0, 5.0, 0.5]
+myus = [0, 0, 0, -2]
+
+x = np.arange(-5., 5., 0.001)
+for v in zip(sigmas,myus):
+    y = (1./np.sqrt(2*np.pi*v[0])) * np.exp(-(x - v[1])**2/2/v[0])
+    # plt.plot(x, y)
+    #plt.show()
+    print y
+"""
