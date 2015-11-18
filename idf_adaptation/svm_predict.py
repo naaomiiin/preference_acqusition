@@ -13,7 +13,10 @@ def svm(knownList,unknownList,idfValue):
     unknownList_count = len(unknownList)
     print "わかるIDF個数>>>", knownList_count , ", わからないIDF個数>>>" , unknownList_count
   
-# 1 for x in range(10) 1が10回表示される
+    for i in range(knownList_count):     # 1がわかるIDF個数回表示
+        print ("1")
+    for i in range(unknownList_count):     # 1がわかるIDF個数回表示                                                                                                                 
+        print ("0")
 
 #    data_training = [[x[1]] for x in data_training_tmp] # IDF値
 #    label_training = [int(x[0]) for x in data_training_tmp] # わかる(1), わからない(0)
@@ -29,7 +32,7 @@ def svm(knownList,unknownList,idfValue):
 # 予測
   #  label_prediction = estimator.predict()
   #  if label_prediction == [1]:
-  #      return data_test + "はわかる"
+  #      return idfValue , "はわかる"
   #  else:
-  #      return data_test + "はわからない"
+  #      return idfValue , "はわからない"
 

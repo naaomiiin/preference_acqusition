@@ -4,7 +4,6 @@ from bottle import route, run, HTTPResponse, request, Bottle, response, static_f
 import simplejson as json
 from StringIO import StringIO
 import svm_predict as s
-import numpy as np
 import ast
 
 
