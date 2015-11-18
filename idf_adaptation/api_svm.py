@@ -4,6 +4,9 @@ from bottle import route, run, HTTPResponse, request, Bottle, response, static_f
 import simplejson as json
 from StringIO import StringIO
 import svm_predict as s
+import numpy as np
+import ast
+
 
 app = Bottle()
 
@@ -15,11 +18,13 @@ app = Bottle()
 def svm():
     idfValue    = str(request.query["idf-value"])
     knownList   = request.query["known-list"]
+    knownList = ast.literal_eval(knownList)
     unknownList = request.query["unknown-list"]
-#    print type(knownList)
+    unknownList = ast.literal_eval(unknownList)
+    #print type(knownList)
 #    return "|>"+idfValue+":"+float(knownList)
     #パラメータを型を変更して読み込む　でぐぐってみる
     return s.svm( knownList, unknownList, idfValue )
-    
+
 
 run(app,host='0.0.0.0', port=9900, debug=True, reloader=True) # ビルドインサーバの実行

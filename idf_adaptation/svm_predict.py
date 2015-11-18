@@ -5,14 +5,14 @@ import numpy as np
 
 def svm(knownList,unknownList,idfValue):
     # 学習データ
-    print str(knownList)+" => "+str(unknownList)+" => "+str(idfValue)
-#    for x in knownList:
-    print len(knownList)
-#    print ">>>"+len(knownList)
-#known,unknown配列個数変数に入れる
+    # print knownList
+    # for i in range(len(knownList)):  # lenでリストの要素数を求める, rangeにループ回数(回数分の要素のリストが戻り値), inはリストをとる
+    # print knownList[i]
 
-
-
+    knownList_count = len(knownList)
+    unknownList_count = len(unknownList)
+    print "わかるIDF個数>>>", knownList_count , ", わからないIDF個数>>>" , unknownList_count
+  
 # 1 for x in range(10) 1が10回表示される
 
 #    data_training = [[x[1]] for x in data_training_tmp] # IDF値
