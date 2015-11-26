@@ -9,10 +9,6 @@ import ast
 
 app = Bottle()
 
-#@app.route('/', method="GET")
-#def tmp():
-#    return "TEST!!!"
-
 @app.route('/svm', method="GET")
 def svm():
     idfValue    = str(request.query["idf-value"])
