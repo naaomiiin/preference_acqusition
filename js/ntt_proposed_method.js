@@ -51,11 +51,15 @@ $("#append-text").click(function(){
     
     $.ajax({
 	type: 'GET',
-        url:"http://shower.human.waseda.ac.jp/~naomi/preference_acquisition/ntt_proposed_method.php?keyword="+sentence+"&n="+number,
+	url:"http://shinzan.human.waseda.ac.jp/~itonaomi/preference_acquisition/ntt_proposed_method.php?keyword="+sentence+"&n="+number, 
+//        url:"http://shower.human.waseda.ac.jp/~naomi/preference_acquisition/ntt_proposed_method.php?keyword="+sentence+"&n="+number,
 	async:false,
 	dataType:"json",
 	success: function(data){
+	    var api = '<?php echo $api_result; ?>';
+	    
 	    console.log(">>XS成功");
+	    console.log(api);
 	    systemReply = data.reply;
 	    idf = data[data.length - 1].idf;
 	    console.log(data[data.length - 1]);

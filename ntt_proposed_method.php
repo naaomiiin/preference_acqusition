@@ -1,7 +1,7 @@
 <?php
-header("Access-Control-Allow-Origin: *");
+
+//header("Access-Control-Allow-Origin: *");
 header('Content-Type: application/json');
-//header('Access-Control-Allow-Origin: *');
 
 // Common
 define('WIKIPEDIA_API_URL', 'http://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%83%87%E3%83%BC%E3%82%BF%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97');
@@ -105,7 +105,7 @@ function get_IDF_return($ret_array, $n){
 
 
   for($i = 0; $i < count($mysql_data_array); $i++){
-  	 //$api_result = access_api('http://shower.human.waseda.ac.jp:9900/svm?idf-value=6.25&known-list=1,3.5,4&unknown-list=4,2,6,8,6');
+//  	 $api_result = access_api('http://shinzan.human.waseda.ac.jp:9900/svm?idf-value=6.25&known-list=1,3.5,4&unknown-list=4,2,6,8,6');
         //print $mysql_data_array[$i]["単語"] . "\t";
         //print $mysql_data_array[$i]["IDF値"] . "\n";
   }
