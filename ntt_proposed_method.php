@@ -1,37 +1,12 @@
 <?php
 
-//header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: *");
 header('Content-Type: application/json');
 
 // Common
 define('WIKIPEDIA_API_URL', 'http://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%83%87%E3%83%BC%E3%82%BF%E6%9B%B8%E3%81%8D%E5%87%BA%E3%81%97');
 define('MECAB_STRING_CUT_LENGTH','8');
 define('LOOP_MAX_COUNT','3');
-
-
-//URLで指定したAPIにアクセスして結果を文字列として返す関数
-function access_api($url){
-  // curlセッションの初期化
-  $ch = curl_init($url);
-
-  // 返り値を文字列として受け取るように設定
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-
-  // APIにアクセスし，結果を文字列として$resultに格納
-  $result = curl_exec($ch);
-
-  // HTTPステータスコードをチェックしエラーならエラー内容を出力
-  if(curl_errno($ch)) {
-      echo 'Curl error: ' . curl_error($ch);
-  }
-
-  // セッションを閉じる
-  curl_close($ch);
-
-  // リクエストの内容を出力
-  return $result;
-}
-
 
 
 // いらない文字列を排除する．純粋な配列に成形
@@ -75,15 +50,17 @@ function get_IDF_return($ret_array, $n){
   }
 
 
-  $result = mysql_query('SELECT 単語,出現ページ数,IDF値,text_fam from ntt_idf');
+  $result = mysql_query('SELECT 単語,出現ページ数,IDF値 from idf');
 
   $mysql_data_array = array();
+  $known_array = array();
+  $unknown_array = array();
 
   foreach($ret_array as $value){
     $word = rtrim($value,"\n");
-    $sql = "SELECT distinct *  FROM ntt_idf WHERE 単語 = '$word';";
+    $sql = "SELECT *  FROM idf WHERE 単語 = '$word';";
     $result = mysql_query($sql);
-  
+
   while($line =  mysql_fetch_assoc($result)){
       array_push($mysql_data_array, $line);
     }
@@ -92,6 +69,7 @@ function get_IDF_return($ret_array, $n){
   foreach($mysql_data_array as $key => $value){
       $key_id[$key] = $value['IDF値'];
   }
+
 
  if(is_array($value)){
 
@@ -105,12 +83,22 @@ function get_IDF_return($ret_array, $n){
 
 
   for($i = 0; $i < count($mysql_data_array); $i++){
-//  	 $api_result = access_api('http://shinzan.human.waseda.ac.jp:9900/svm?idf-value=6.25&known-list=1,3.5,4&unknown-list=4,2,6,8,6');
+  	        $url = "http://shower.human.waseda.ac.jp:9900/svm?idf-value={$mysql_data_array[$i]["IDF値"]}&known-list=1,2,3&unknown-list=4,5,6";
+                $svm_api = file_get_contents($url);
+
+	 	if($svm_api == "1"){	// わかる場合
+			array_push($known_array,$mysql_data_array[$i]);
+			//print $svm_api;
+			//print $mysql_data_array[$i]["単語"] . "\t";
+        		//print $mysql_data_array[$i]["IDF値"] . "\n";
+		}else{
+			array_push($unknown_array,$mysql_data_array[$i]);
+		}	
+	
         //print $mysql_data_array[$i]["単語"] . "\t";
         //print $mysql_data_array[$i]["IDF値"] . "\n";
   }
 
-   
 
     $properNoun = exec('echo "'.
                        $mysql_data_array[0].
@@ -138,8 +126,9 @@ if(isset($mysql_data_array[$index]["単語"])){
       
         $reply = $mysql_data_array[$i]["単語"] . "についてどう思いますか？";
         $noun = $mysql_data_array[$i]["単語"];
-        $idf = floatval($mysql_data_array[$i]["IDF値"]);    
-      
+        $idf = floatval($mysql_data_array[$i]["IDF値"]);   
+
+    
         $json_array= array(
           'reply'=> $reply,
           'noun'=> $noun,
@@ -155,12 +144,18 @@ if(isset($mysql_data_array[$index]["単語"])){
       // 一般名詞かどうか
       $result = Array();
       for($i = 0; $i < $number; $i++){
-        //print "好きな" . $mysql_data_array[$i]["単語"] . "は何ですか？";
-      
+/*
         $reply = "好きな" . $mysql_data_array[$i]["単語"] . "は何ですか？";
         $noun = $mysql_data_array[$i]["単語"];
         $idf = floatval($mysql_data_array[$i]["IDF値"]);
-      
+*/
+
+//var_dump ( $mysql_data_array);
+	$reply = "好きな" . $known_array[$i]["単語"] . "は何ですか？";
+        $noun = $known_array[$i]["単語"];
+        $idf = floatval($known_array[$i]["IDF値"]);
+
+
         $json_array= array(
           'reply'=> $reply,
           'noun'=> $noun,
