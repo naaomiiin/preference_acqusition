@@ -53,10 +53,16 @@ function get_IDF_return($ret_array, $n){
   $result = mysql_query('SELECT 単語,出現ページ数,IDF値 from idf');
 
   $mysql_data_array = array();
+  $all_known_idf   = array();  
+  $all_unknown_idf = array();
+  $known_idf   = array(1,2,3);
+  $unknown_idf = array(5,6,7);
   $known_array = array();
-  $unknown_array = array();
 
-  foreach($ret_array as $value){
+  $split_known_idf = implode(",", $known_idf);
+  $split_unknown_idf = implode(",", $unknown_idf);
+
+    foreach($ret_array as $value){
     $word = rtrim($value,"\n");
     $sql = "SELECT *  FROM idf WHERE 単語 = '$word';";
     $result = mysql_query($sql);
@@ -71,6 +77,7 @@ function get_IDF_return($ret_array, $n){
   }
 
 
+
  if(is_array($value)){
 
     array_multisort($key_id, SORT_DESC, $mysql_data_array);
@@ -83,22 +90,32 @@ function get_IDF_return($ret_array, $n){
 
 
   for($i = 0; $i < count($mysql_data_array); $i++){
-  	        $url = "http://shower.human.waseda.ac.jp:9900/svm?idf-value={$mysql_data_array[$i]["IDF値"]}&known-list=1,2,3&unknown-list=4,5,6";
-                $svm_api = file_get_contents($url);
+  	
+		$url = "http://shower.human.waseda.ac.jp:9900/svm?idf-value={$mysql_data_array[$i]["IDF値"]}&known-list={$split_known_idf}&unknown-list={$split_unknown_idf}";
+		$svm_api = file_get_contents($url);
+  
+	 	if($svm_api == "1"){	// わかる場合 all_known_idfにIDF値を追加
+			array_push($known_array,$mysql_data_array[$i]["単語"]);
+			array_push($all_known_idf,$mysql_data_array[$i]["IDF値"]);
+			 //print $mysql_data_array[$i]["単語"] . "\t";
+        		 //print $mysql_data_array[$i]["IDF値"] . "\n";
 
-	 	if($svm_api == "1"){	// わかる場合
-			array_push($known_array,$mysql_data_array[$i]);
-			//print $svm_api;
-			//print $mysql_data_array[$i]["単語"] . "\t";
-        		//print $mysql_data_array[$i]["IDF値"] . "\n";
 		}else{
-			array_push($unknown_array,$mysql_data_array[$i]);
-		}	
-	
+		}
+
+
+	if($_POST["input"]==="わかりません"){                      // わからない場合 unknown_idfにIDF値を追加
+           array_unshift($unknown_idf,$mysql_data_array[$i]["IDF値"]);
+	   print $unknown_idf[0];
+	}  	
+
         //print $mysql_data_array[$i]["単語"] . "\t";
         //print $mysql_data_array[$i]["IDF値"] . "\n";
   }
 
+
+
+    array_unshift($known_idf,$all_known_idf[0]);  // known_idfの先頭にIDF値を追加
 
     $properNoun = exec('echo "'.
                        $mysql_data_array[0].
@@ -117,18 +134,20 @@ function get_IDF_return($ret_array, $n){
 
     $index = $n - 1;
 
+//print "わかるidf値の数>>>>>>".var_dump($known_idf)."こ\t";
+
 if(isset($mysql_data_array[$index]["単語"])){
     if(strstr($properNoun, $comparePropernoun)){
       // 固有名詞かどうか
       $result = Array();
       for($i = 0; $i < $number; $i++){
-        //print $mysql_data_array[$i]["単語"] . "についてどう思いますか？";
-      
-        $reply = $mysql_data_array[$i]["単語"] . "についてどう思いますか？";
-        $noun = $mysql_data_array[$i]["単語"];
-        $idf = floatval($mysql_data_array[$i]["IDF値"]);   
+        //$count = count($mysql_data_array)-1;
+        //$c = $count/2+$i;
 
-    
+	$reply = "好きな" . $known_array[$i]. "は何ですか？";
+        $noun = $known_array[$i];
+	$idf = floatval($all_known_idf[$i]);    
+
         $json_array= array(
           'reply'=> $reply,
           'noun'=> $noun,
@@ -144,17 +163,12 @@ if(isset($mysql_data_array[$index]["単語"])){
       // 一般名詞かどうか
       $result = Array();
       for($i = 0; $i < $number; $i++){
-/*
-        $reply = "好きな" . $mysql_data_array[$i]["単語"] . "は何ですか？";
-        $noun = $mysql_data_array[$i]["単語"];
-        $idf = floatval($mysql_data_array[$i]["IDF値"]);
-*/
+        //$count = count($known_array)-1;
+        //$c = $count/2+$i;
 
-//var_dump ( $mysql_data_array);
-	$reply = "好きな" . $known_array[$i]["単語"] . "は何ですか？";
-        $noun = $known_array[$i]["単語"];
-        $idf = floatval($known_array[$i]["IDF値"]);
-
+	$reply = "好きな" . $known_array[$i] . "は何ですか？";
+        $noun = $known_array[$i];
+	$idf = floatval($all_known_idf[$i]);
 
         $json_array= array(
           'reply'=> $reply,
