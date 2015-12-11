@@ -8,6 +8,8 @@ define('WIKIPEDIA_API_URL', 'http://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3
 define('MECAB_STRING_CUT_LENGTH','8');
 define('LOOP_MAX_COUNT','3');
 
+// ユーザー情報取得
+
 
 // いらない文字列を排除する．純粋な配列に成形
 function clearString($str){
@@ -33,7 +35,19 @@ function clearString($str){
 
 // IDFの取得
 function get_IDF_return($ret_array, $n){
+
+  // パラメータからgetでユーザ番号取得
+  if (isset($_GET['user_name'])) {
+     $your_name = $_GET['user_name'];
+      //print $your_name;
+  }else{
+     $your_name = "your_name query error";
+     //print $your_name; 
+  }
+
   $number = $_GET['n'];
+
+  // IDF取得DBに接続
   $con = mysql_connect('localhost', 'klab', '0nsayken9');
   if (!$con) {
     exit('データベースに接続できませんでした。');
@@ -89,33 +103,75 @@ function get_IDF_return($ret_array, $n){
     //print $r_mysql_data_array[0]["IDF値"]."\n";
 
 
+
+
   for($i = 0; $i < count($mysql_data_array); $i++){
-  	
+  
+		// wikipediaページに登場する名詞全てをわかるわからないに分類 
 		$url = "http://shower.human.waseda.ac.jp:9900/svm?idf-value={$mysql_data_array[$i]["IDF値"]}&known-list={$split_known_idf}&unknown-list={$split_unknown_idf}";
 		$svm_api = file_get_contents($url);
+		
+	if($svm_api == "1"){    // わかる場合 all_known_idfにIDF値を追加	
+		array_push($known_array,$mysql_data_array[$i]["単語"]);
+                array_push($all_known_idf,$mysql_data_array[$i]["IDF値"]);
+	}
+  }
   
-	 	if($svm_api == "1"){	// わかる場合 all_known_idfにIDF値を追加
-			array_push($known_array,$mysql_data_array[$i]["単語"]);
-			array_push($all_known_idf,$mysql_data_array[$i]["IDF値"]);
+		             // svmDBに接続
+                             $con = mysql_connect('localhost', 'klab', '0nsayken9');
+                             if (!$con) {
+                               exit('データベースに接続できませんでした。');
+                             }
+
+                             $result = mysql_select_db('naomi', $con);
+                             if (!$result) {
+                               exit('データベースを選択できませんでした。');
+                             }
+
+                             $result = mysql_query('SET NAMES utf8', $con);
+                             if (!$result) {
+                               exit('文字コードを指定できませんでした。');
+                             }
+
+                             $result = mysql_query('SELECT your_name,idf,known from word_knowledge');
+
+	 		     if($svm_api == "1"){	
+			       // データを追加
+			       $sql = "INSERT INTO word_knowledge (your_name,idf,known) VALUES ('{$your_name}', '{$all_known_idf[$number-1]}', 'true')";
+			     }elseif($input_data == "わかりません"){
+			       $sql = "INSERT INTO word_knowledge (your_name,idf,known) VALUES ('{$your_name}', '{$all_unknown_idf[0]}', 'false')";
+			     }
+  			     
+			     $result_flag = mysql_query($sql);
+
+			    if (!$result_flag) {
+  			      die('INSERTクエリーが失敗しました。'.mysql_error());
+  			    }
+
+	         	  // 追加後データ取得
+ 	        	    $result = mysql_query('SELECT your_name,idf,known from word_knowledge');
+ 		            if (!$result) {
+  			      die('SELECTクエリーが失敗しました。'.mysql_error());
+  			    }
+
+			    while ($row = mysql_fetch_assoc($result)) {
+     			     //print ('your_name='.$row['your_name']);
+  			     //print (',idf='.$row['idf']);
+  			     //print (',known='.$row['known']);
+  			    }
+
+                            $close_flag = mysql_close($link);
+
+                            if ($close_flag){
+      			      print('<p>切断に成功しました。</p>');
+			    } 
+
 			 //print $mysql_data_array[$i]["単語"] . "\t";
         		 //print $mysql_data_array[$i]["IDF値"] . "\n";
 
-		}else{
-		}
-
-
-	if($_POST["input"]==="わかりません"){                      // わからない場合 unknown_idfにIDF値を追加
-           array_unshift($unknown_idf,$mysql_data_array[$i]["IDF値"]);
-	   print $unknown_idf[0];
-	}  	
-
-        //print $mysql_data_array[$i]["単語"] . "\t";
-        //print $mysql_data_array[$i]["IDF値"] . "\n";
-  }
-
-
-
-    array_unshift($known_idf,$all_known_idf[0]);  // known_idfの先頭にIDF値を追加
+					    
+      
+  //  array_unshift($known_idf,$all_known_idf[0]);  // known_idfの先頭にIDF値を追加
 
     $properNoun = exec('echo "'.
                        $mysql_data_array[0].
@@ -163,6 +219,8 @@ if(isset($mysql_data_array[$index]["単語"])){
       // 一般名詞かどうか
       $result = Array();
       for($i = 0; $i < $number; $i++){
+
+      
         //$count = count($known_array)-1;
         //$c = $count/2+$i;
 
@@ -266,7 +324,6 @@ while (1){
      // print $loopCount;
       $qStateTemp = "Exit";
   }
-
 
 //  print " You : ";
 //  fscanf(STDIN, "%s", $in);

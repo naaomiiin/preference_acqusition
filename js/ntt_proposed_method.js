@@ -46,11 +46,12 @@ $("#append-text").click(function(){
         $('#your_name').hide();
     });
 
-    var idf="";
-    
+    var idf = "";
+    var m = location.search.match(/user_name=([0-9a-z]+)/i);
+
     $.ajax({
 	type: 'GET',
-	url:"http://shinzan.human.waseda.ac.jp/~itonaomi/preference_acquisition/ntt_proposed_method.php?keyword="+sentence+"&n="+number, 
+	url:"http://shinzan.human.waseda.ac.jp/~itonaomi/preference_acquisition/ntt_proposed_method.php?keyword="+sentence+"&n="+number+"&user_name="+m[1], 
 	//url:"http://shower.human.waseda.ac.jp/~naomi/preference_acquisition/ntt_proposed_method.php?keyword="+sentence+"&n="+number,
 	async:false,
 	dataType:"json",

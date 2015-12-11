@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>実験説明</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/experiment.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="chartist/chartist.min.css">
+    <script src="chartist/chartist.min.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+  </head>
+  <body>
+    <div id="header" background="dot3.png">
+      <h1>対話システム評価実験一覧ページ</h1><br>
+      <br>
+    </div>
+    <div class="colmask rightmenu">
+      <div class="container">
+        <div class="row" style="height:600px;">
+          <div class="col-sm-12"> <!-- カラム 1 ここから -->
+	    <span>
+              <img src="./img/lace.png" id="left_lace">
+              <img src="./img/lace.png" id="right_lace"> 
+            </span>
+	    <br>
+	  </div>
+	  <div id="h2_top">
+	    <form method="GET" action="./proposed_method.html">
+	      <b><p style="margin-right:190px;">◎ 被験者番号（半角数字）を入力後, 対話システムボタンを押してください</p></b>
+	      <input type="text" name="user_name" class="user_name" placeholder="例 : F110" style="width:500px" >
+	      <h2><input type="submit" value="対話システム１" class="system_button"></h2>
+	    </form>
+	    <br><br><br>
+	    <form method="GET" action="./ntt_proposed_method.html">
+	      <b><p style="margin-right:190px;">◎ 被験者番号（半角数字）を入力後, 対話システムボタンを押してください</p></b>
+	      <input type="text" name="user_name" class="user_name" placeholder="例 : F110" style="width:500px" >
+              <input type="submit" class="system_button">
+	    </form>
+	    
+
+
+	    <br><br><br>
+	    <form method="GET" action="./compare_method.html">
+	      <b><p style="margin-right:190px;">◎  被験者番号（半角数字）を入力後, 対話システムボタンを押してください</p></b>
+              <input type="text" name="user_name" class="user_name" placeholder="例 : F110" style="width:500px" >
+              <h2> <input type="submit" value="対話システム３" class="system_button"></h2>
+            </form>
+	    <!--<h2><a href="proposed_method.html">対話システム１</a></h2><br>
+            <h2><a href="ntt_proposed_method.html">対話システム２</a></h2><br>
+            <h2><a href="compare_method.html">対話システム３</a></h2><br>-->
+          </div>
+	</div>
+      </div> <!-- カラム 1 ここまで -->
+    </div>
+</div>
+<div id="buttom" style="height:100px;"> 
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
