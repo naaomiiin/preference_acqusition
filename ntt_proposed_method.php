@@ -98,80 +98,99 @@ function get_IDF_return($ret_array, $n){
     //print $mysql_data_array[0]["単語"];
     //print $mysql_data_array[0]["IDF値"]."\n";
 
-    $r_mysql_data_array = array_reverse($mysql_data_array);
+    //$r_mysql_data_array = array_reverse($mysql_data_array);
     //print $r_mysql_data_array[0]["単語"];
     //print $r_mysql_data_array[0]["IDF値"]."\n";
 
 
 
+ // svmDBに接続
+   $con = mysql_connect('localhost', 'klab', '0nsayken9');
+   if (!$con) {
+     exit('データベースに接続できませんでした。');
+   }            
+   $result = mysql_select_db('naomi', $con);
+   if (!$result) {
+     exit('データベースを選択できませんでした。');
+   }
 
-  for($i = 0; $i < count($mysql_data_array); $i++){
-  
-		// wikipediaページに登場する名詞全てをわかるわからないに分類 
-		$url = "http://shower.human.waseda.ac.jp:9900/svm?idf-value={$mysql_data_array[$i]["IDF値"]}&known-list={$split_known_idf}&unknown-list={$split_unknown_idf}";
-		$svm_api = file_get_contents($url);
-		
-	if($svm_api == "1"){    // わかる場合 all_known_idfにIDF値を追加	
-		array_push($known_array,$mysql_data_array[$i]["単語"]);
-                array_push($all_known_idf,$mysql_data_array[$i]["IDF値"]);
-	}
-  }
-  
-		             // svmDBに接続
-                             $con = mysql_connect('localhost', 'klab', '0nsayken9');
-                             if (!$con) {
-                               exit('データベースに接続できませんでした。');
-                             }
+   $result = mysql_query('SET NAMES utf8', $con);
 
-                             $result = mysql_select_db('naomi', $con);
-                             if (!$result) {
-                               exit('データベースを選択できませんでした。');
-                             }
+   if (!$result) {
+     exit('文字コードを指定できませんでした。');
+   }
 
-                             $result = mysql_query('SET NAMES utf8', $con);
-                             if (!$result) {
-                               exit('文字コードを指定できませんでした。');
-                             }
+   $result = mysql_query('SELECT your_name,idf,known from word_knowledge');
 
-                             $result = mysql_query('SELECT your_name,idf,known from word_knowledge');
+   
+   for($i = 0; $i < count($mysql_data_array); $i++){
+   // wikipediaページに登場する名詞全てをわかるわからないに分類
+     $url =  "http://shower.human.waseda.ac.jp:9900/svm?idf-value={$mysql_data_array[$i]["IDF値"]}&known-list={$split_known_idf}&unknown-list={$split_unknown_idf}";
+     $svm_api = file_get_contents($url);
 
-	 		     if($svm_api == "1"){	
-			       // データを追加
-			       $sql = "INSERT INTO word_knowledge (your_name,idf,known) VALUES ('{$your_name}', '{$all_known_idf[$number-1]}', 'true')";
-			     }elseif($input_data == "わかりません"){
-			       $sql = "INSERT INTO word_knowledge (your_name,idf,known) VALUES ('{$your_name}', '{$all_unknown_idf[0]}', 'false')";
-			     }
-  			     
-			     $result_flag = mysql_query($sql);
+     if($svm_api == "1"){    // わかる場合 all_known_idfにIDF値を追加
+        array_push($known_array,$mysql_data_array[$i]["単語"]);
+        array_push($all_known_idf,$mysql_data_array[$i]["IDF値"]);
+     }
+   }
 
-			    if (!$result_flag) {
-  			      die('INSERTクエリーが失敗しました。'.mysql_error());
-  			    }
+   if($svm_api == "1"){
+     // データを追加
+     $sql = "INSERT INTO word_knowledge (your_name,idf,known) VALUES ('{$your_name}', '{$all_known_idf[$number-1]}', 'true')";
+   }else{  // わからない場合unknown_idfにidf値を追加したい!!!!!
+     $sql = "INSERT INTO word_knowledge (your_name,idf,known) VALUES ('{$your_name}', '{$all_unknown_idf[0]}', 'false')";
+   }
 
-	         	  // 追加後データ取得
- 	        	    $result = mysql_query('SELECT your_name,idf,known from word_knowledge');
- 		            if (!$result) {
-  			      die('SELECTクエリーが失敗しました。'.mysql_error());
-  			    }
+   $result_flag = mysql_query($sql);
 
-			    while ($row = mysql_fetch_assoc($result)) {
-     			     //print ('your_name='.$row['your_name']);
-  			     //print (',idf='.$row['idf']);
-  			     //print (',known='.$row['known']);
-  			    }
+   if (!$result_flag) {
+     die('INSERTクエリーが失敗しました。'.mysql_error());
+   }
 
-                            $close_flag = mysql_close($link);
+   // 追加後データ取得
+   $result = mysql_query('SELECT your_name,idf,known from word_knowledge');
+   if (!$result) {
+     die('SELECTクエリーが失敗しました。'.mysql_error());
+   }   
+   
+   while ($row = mysql_fetch_assoc($result)) {  			    
+     if($row['your_name'] == $your_name){  // ユーザ番号が同じで
+       if($row['known'] == "true"){   // わかると分類されていたらknown_idfにidf値をpush
+	 array_push($known_idf,$row["idf"]);
+       }else{			      // わからないと分類されていたらunknown_idfにidf値をpush
+   	 array_push($unknown_idf,$row["idf"]);
+       }
+     } 
+   }		
 
-                            if ($close_flag){
-      			      print('<p>切断に成功しました。</p>');
-			    } 
+   $close_flag = mysql_close($link);
 
-			 //print $mysql_data_array[$i]["単語"] . "\t";
-        		 //print $mysql_data_array[$i]["IDF値"] . "\n";
+   if ($close_flag){
+     print('<p>切断に成功しました。</p>');
+   }
 
-					    
-      
-  //  array_unshift($known_idf,$all_known_idf[0]);  // known_idfの先頭にIDF値を追加
+
+   $split_known_idf = implode(",", $known_idf);
+   $split_unknown_idf = implode(",", $unknown_idf);
+
+
+   for($i = 0; $i < count($mysql_data_array); $i++){
+     // wikipediaページに登場する名詞全てをわかるわからないに分類
+     $url =  "http://shower.human.waseda.ac.jp:9900/svm?idf-value={$mysql_data_array[$i]["IDF値"]}&known-list={$split_known_idf}&unknown-list={$split_unknown_idf}";
+     $svm_api = file_get_contents($url);
+
+     if($svm_api == "1"){    // わかる場合 all_known_idfにIDF値を追加
+        array_push($known_array,$mysql_data_array[$i]["単語"]);
+        array_push($all_known_idf,$mysql_data_array[$i]["IDF値"]);
+     }
+   }
+
+
+   //var_dump ($known_idf);
+   //print $mysql_data_array[$i]["単語"] . "\t";
+   //print $mysql_data_array[$i]["IDF値"] . "\n";
+   //  array_unshift($known_idf,$all_known_idf[0]);  // known_idfの先頭にIDF値を追加
+
 
     $properNoun = exec('echo "'.
                        $mysql_data_array[0].
@@ -190,7 +209,6 @@ function get_IDF_return($ret_array, $n){
 
     $index = $n - 1;
 
-//print "わかるidf値の数>>>>>>".var_dump($known_idf)."こ\t";
 
 if(isset($mysql_data_array[$index]["単語"])){
     if(strstr($properNoun, $comparePropernoun)){
