@@ -1,9 +1,10 @@
 
 $('#your_name').first().focus();
 
-var taiwa_counter=0;
-var append_counter=0;
-var number=1;
+var taiwa_counter = 0;
+var append_counter = 0;
+var unknown_sentence = "";
+var number = 1;
 
 $(document).ready(function() {
     $("input[type='text']").keypress(function(ev) {
@@ -20,7 +21,7 @@ $("#append-text").click(function(){
     var sentence=$("#input").val();
     var name=$("#your_name").val();
     $(':hidden[name="name"]').val(name);
-    
+
     
     systemReply = "そうなんですね。他の趣味はありますか？";
     taiwa_counter++;
@@ -29,12 +30,14 @@ $("#append-text").click(function(){
     if($("#input").val()==="わかりません"){
 	number++;
 	sentence = $(':hidden[name="noun"]').val();
+	unknown_sentence = $(':hidden[name="wakarimasen"]').val("わかりません");
+	var wakarimasen = document.getElementById('wakarimasen').value;	
+	
     }else if($("#input").val()===""){
         taiwa_counter--;
     }else{
 	number=1;
     }
-
 
     if(taiwa_counter===10){
         $(function(){
@@ -49,39 +52,78 @@ $("#append-text").click(function(){
     var idf = "";
     var m = location.search.match(/user_name=([0-9a-z]+)/i);
 
-    $.ajax({
-	type: 'GET',
-	url:"http://shinzan.human.waseda.ac.jp/~itonaomi/preference_acquisition/ntt_proposed_method.php?keyword="+sentence+"&n="+number+"&user_name="+m[1], 
-	//url:"http://shower.human.waseda.ac.jp/~naomi/preference_acquisition/ntt_proposed_method.php?keyword="+sentence+"&n="+number,
-	async:false,
-	dataType:"json",
-	success: function(data){
-	    //var api = '<?php echo $api_result; ?>';
-	    console.log(">>XS成功");
-	    //console.log(api);
-	    systemReply = data.reply;
-	    idf = data[data.length - 1].idf;
-	    console.log(data[data.length - 1]);
-	    
-	    
-	    if(data[data.length - 1].condition === "ok"){  //エラー処理
-		systemReply = data[data.length - 1].reply;
-		$(':hidden[name="noun"]').val(sentence);
-	    }else if($("#input").val()===""){
-		systemReply = "何か入力してください";
-	    }else{
-		systemReply = "そうなんですね。他の趣味はありますか？";
+    if(taiwa_counter===1){
+	$.ajax({
+	    type: 'GET',
+	    url:"http://shinzan.human.waseda.ac.jp/~itonaomi/preference_acquisition/ntt_proposed_method.php",
+	    async:false,
+	    dataType:"json",
+	    data: {                                                                                                                                                                                                                                         
+		'wakarimasen' : wakarimasen,                                                                                                                                                                                                               
+		'keyword': sentence,
+		'n':number,
+		'user_name':m[1]
+	    },  
+	    success: function(data){
+		console.log(">>XS成功");
+		systemReply = data.reply;
+		console.log(data[data.length - 1]);
+		
+		if(data[data.length - 1].condition === "ok"){  //エラー処理
+		    systemReply = data[data.length - 1].reply;
+		    $(':hidden[name="noun"]').val(sentence);
+		    var previous_idf = $(':hidden[name="previous_idf"]').val(data[data.length - 1].idf);
+		    previous_idf = document.getElementById('previous_idf').value;
+		    console.log(">>>>>"+previous_idf);
+		}else if($("#input").val()===""){
+		    systemReply = "何か入力してください";
+		}else{
+		    systemReply = "そうなんですね。他の趣味はありますか？";
+		}
+	    },
+	    error: function(data){
+		console.log("apiサーバでエラー発生");
+		console.log(data);
 	    }
-	},
-	error: function(data){
-	    console.log("apiサーバでエラー発生");
-	    console.log(data);
-	}
-    });
-    
-    if(systemReply==="好きなは何ですか？"){
-	systemReply="そうなんですね。他の趣味はありますか？";
+	});
+    }else{    // 対話回数2回目以降
+	previous_idf = document.getElementById('previous_idf').value;
+	$.ajax({
+            type: 'GET',
+            url:"http://shinzan.human.waseda.ac.jp/~itonaomi/preference_acquisition/ntt_proposed_method.php",
+            async:false,
+            dataType:"json",
+            data: {
+		'previous_idf': previous_idf,
+		'wakarimasen' : wakarimasen,
+		'keyword': sentence,
+		'n':number,
+		'user_name':m[1]
+            },
+            success: function(data){
+		console.log(">>XS成功");
+		systemReply = data.reply;
+		console.log(data[data.length - 1]);
+
+		if(data[data.length - 1].condition === "ok"){  //エラー処理                                                                                                                                                                                  
+                    systemReply = data[data.length - 1].reply;
+                    $(':hidden[name="noun"]').val(sentence);
+                    var previous_idf = $(':hidden[name="previous_idf"]').val(data[data.length - 1].idf);
+                    previous_idf = document.getElementById('previous_idf').value;
+		    console.log(">>>>>"+previous_idf);
+		}else if($("#input").val()===""){
+                    systemReply = "何か入力してください";
+		}else{
+		    systemReply = "そうなんですね。他の趣味はありますか？";
+		}
+            },
+            error: function(data){
+		console.log("apiサーバでエラー発生");
+		console.log(data);
+	    }
+	});
     }
+    
 
 
 

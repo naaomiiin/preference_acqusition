@@ -69,8 +69,8 @@ function get_IDF_return($ret_array, $n){
   $mysql_data_array = array();
   $all_known_idf   = array();  
   $all_unknown_idf = array();
-  $known_idf   = array(1,2,3);
-  $unknown_idf = array(5,6,7);
+  $known_idf   = array(1);
+  $unknown_idf = array(7);
   $known_array = array();
 
   $split_known_idf = implode(",", $known_idf);
@@ -122,8 +122,11 @@ function get_IDF_return($ret_array, $n){
 
    $result = mysql_query('SELECT your_name,idf,known from word_knowledge');
 
-   
-   for($i = 0; $i < count($mysql_data_array); $i++){
+  $wakarimasen = $_GET['wakarimasen'];
+  $previous_idf = $_GET['previous_idf'];
+
+    for($i = 0; $i < count($mysql_data_array); $i++){
+
    // wikipediaページに登場する名詞全てをわかるわからないに分類
      $url =  "http://shower.human.waseda.ac.jp:9900/svm?idf-value={$mysql_data_array[$i]["IDF値"]}&known-list={$split_known_idf}&unknown-list={$split_unknown_idf}";
      $svm_api = file_get_contents($url);
@@ -131,14 +134,26 @@ function get_IDF_return($ret_array, $n){
      if($svm_api == "1"){    // わかる場合 all_known_idfにIDF値を追加
         array_push($known_array,$mysql_data_array[$i]["単語"]);
         array_push($all_known_idf,$mysql_data_array[$i]["IDF値"]);
-     }
+     }elseif($svm_api == "0"){
+	array_push($unknown_array,$mysql_data_array[$i]["単語"]);
+        array_push($all_unknown_idf,$mysql_data_array[$i]["IDF値"]);
+      }
    }
-
-   if($svm_api == "1"){
+  
+   if(isset($wakarimasen)){	// わからない場合known列にfalseを追加したい!!!!!
      // データを追加
-     $sql = "INSERT INTO word_knowledge (your_name,idf,known) VALUES ('{$your_name}', '{$all_known_idf[$number-1]}', 'true')";
-   }else{  // わからない場合unknown_idfにidf値を追加したい!!!!!
-     $sql = "INSERT INTO word_knowledge (your_name,idf,known) VALUES ('{$your_name}', '{$all_unknown_idf[0]}', 'false')";
+     if(isset($previous_idf)){
+	$sql = "INSERT INTO word_knowledge (your_name,idf,known) VALUES ('{$your_name}', '{$previous_idf}', 'false')";
+     }else{
+       $reverse_unknown_idf = array_reverse($all_unknown_idf);
+       $sql = "INSERT INTO word_knowledge (your_name,idf,known) VALUES ('{$your_name}', '{$all_known_idf[$number]}', 'false')";
+     }
+   }elseif(isset($all_known_idf[$number-1])){ 
+     if(isset($previous_idf)){
+       $sql = "INSERT INTO word_knowledge (your_name,idf,known) VALUES ('{$your_name}', '{$previous_idf}', 'true')";
+     }else{
+       $sql = "INSERT INTO word_knowledge (your_name,idf,known) VALUES ('{$your_name}', '{$all_known_idf[$number-1]}', 'true')";
+     }
    }
 
    $result_flag = mysql_query($sql);
@@ -151,8 +166,8 @@ function get_IDF_return($ret_array, $n){
    $result = mysql_query('SELECT your_name,idf,known from word_knowledge');
    if (!$result) {
      die('SELECTクエリーが失敗しました。'.mysql_error());
-   }   
-   
+   }
+
    while ($row = mysql_fetch_assoc($result)) {  			    
      if($row['your_name'] == $your_name){  // ユーザ番号が同じで
        if($row['known'] == "true"){   // わかると分類されていたらknown_idfにidf値をpush
