@@ -15,14 +15,14 @@
   </head>
   <body>
     <div id="header" background="dot.png">
-    <h2>対話システム２</h2>
+      <h2>対話システム２</h2>
     </div>
     <div class="colmask rightmenu">
       <div class="container">
-        <div class="row" style="height:500px;">
+      	<div class="row" style="height:500px;">
           <div class="col-sm-12"> <!-- カラム 1 ここから -->
             <p id="show_button">
-              <a href="experiment.php" id="back_page" class="a_demo_four">　　一覧ページへ</a>
+              <a href="experiment.html" id="back_page" class="a_demo_four">　　一覧ページへ</a>
             </p>
             <p id="hide" style="display: none;">
               <a href="experiment2.php" class="a_demo_four">アンケートページへ</a>
@@ -45,19 +45,21 @@
             <br>
             </div>
           </div>
-            <br>
-	    <div class="form-group container" style="width:700px;">
-              <label class="sr-only control-label" for="input">Input</label>
-              <input type="text" id="your_name" name="your_name" class="form-control" placeholder="被験者番号（半角数字" style="margin:10px">
-              <input type="text" id="input" name="input" class="form-control" placeholder="発言してね" style="margin:10px">
-            </div>
-            <div class="form-group">
-              <input type="button" id="append-text" value="話す" class="btn btn-primary">
-            </div>
-            <input type="hidden" id="name" name="name">
-            <input type="hidden" id="noun" name="noun">
-        </div> <!-- カラム 1 ここまで -->
-
+          <br>
+	  <div class="form-group container" style="width:700px;">
+	    <label class="sr-only control-label" for="input">Input</label>
+	    <input type="text" id="your_name" name="your_name" class="form-control" placeholder="被験者番号（半角数字）" style="margin:10px">
+	    <input type="text" id="input" name="input" class="form-control" placeholder="発言してね" style="margin:10px">
+	  </div>
+          <div class="form-group">
+	    <input type="button" id="append-text" value="話す" class="btn btn-primary">
+          </div>
+          <input type="hidden" id="name" name="name">
+          <input type="hidden" id="noun" name="noun">
+	  <input type="hidden" id="previous_idf" name="previous_idf">
+	  <input type="hidden" id="wakarimasen" name="wakarimasen">
+	</div> <!-- カラム 1 ここまで -->
+	
       </div>
     </div>
 </div>

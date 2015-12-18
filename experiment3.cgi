@@ -45,7 +45,7 @@ print << "EOF";
             <h3>これで対話システム３についての評価実験はおしまいです。<br>
                 以下のボタンをクリックして, 指定された次の対話システムの実験を行ってください.<br>
                 これが最後の実験だった方は, お手数ですが <font color="#800000"><a href="mailto:naoming.s2@gmail.com">伊藤</a></font> まで実験終了の旨をお伝えください.</h3><br><br><br>
-            <h2><a href="experiment.php">評価実験一覧ページへ戻る</a></h2><br>
+            <h2><a href="experiment.html">評価実験一覧ページへ戻る</a></h2><br>
           </div>
         </div> <!-- カラム 1 ここまで -->
       </div>
@@ -59,7 +59,7 @@ print << "EOF";
 </html>
 EOF
 #------------------結果をファイルに保存する------------------ 
-$filename="experiment.csv";
+$filename="dec_experiment.csv";
 open(OUT, ">>", $filename);
 print OUT $name,",",$age,",",$sex,",system3,",$question_01,",",$question_02,",",$question_03,",",$question_04,",",$question_05,",",$question_06,"\n";
 close(OUT);

@@ -68,7 +68,7 @@
     width:20px;
     height:20px;
     position:absolute;
-    left:15px;
+    left:20px;
     top:50%;
     margin-top:-9px;
     -webkit-border-radius: 50%;
@@ -137,8 +137,9 @@
   -moz-border-radius: 10px;                                                                                                                                                                                                                                  
   -webkit-animation: anim 6s;   
   margin-top: -30px;
-  margin-left: 1000px;
+  margin-left: 750px;
   width:200px;
+  position:fixed;
 }
 
 #first_system{

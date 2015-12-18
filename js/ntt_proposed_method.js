@@ -39,7 +39,7 @@ $("#append-text").click(function(){
 	number=1;
     }
 
-    if(taiwa_counter===10){
+    if(taiwa_counter===30){
         $(function(){
             $('#hide').show();
         });
@@ -72,6 +72,7 @@ $("#append-text").click(function(){
 		if(data[data.length - 1].condition === "ok"){  //エラー処理
 		    systemReply = data[data.length - 1].reply;
 		    $(':hidden[name="noun"]').val(sentence);
+		    idf = data[data.length - 1].idf;
 		    var previous_idf = $(':hidden[name="previous_idf"]').val(data[data.length - 1].idf);
 		    previous_idf = document.getElementById('previous_idf').value;
 		    console.log(">>>>>"+previous_idf);
@@ -108,6 +109,7 @@ $("#append-text").click(function(){
 		if(data[data.length - 1].condition === "ok"){  //エラー処理                                                                                                                                                                                  
                     systemReply = data[data.length - 1].reply;
                     $(':hidden[name="noun"]').val(sentence);
+		    idf = data[data.length - 1].idf;
                     var previous_idf = $(':hidden[name="previous_idf"]').val(data[data.length - 1].idf);
                     previous_idf = document.getElementById('previous_idf').value;
 		    console.log(">>>>>"+previous_idf);

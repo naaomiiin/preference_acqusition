@@ -28,8 +28,9 @@
    <p id="agreement"> ここではあなた自身のことと, 対話システム１との対話について, 以下の質問に回答して頂きます. <br> 
     質問は全部で6問あり, 「1:まったくあてはまらない」から「7:非常にあてはまる」までのいずれかを選択するか,<br>
     テキストボックスに文章を記述して回答してください. <br>
-    全て回答したらページ下部の回答ボタンを押してトップページに戻ってください. <br> </p>
-  <br>
+    全て回答したらページ下部の回答ボタンを押してトップページに戻ってください. <br> 
+   <font size="4" color="#C97C00"><strong>※  システムの返答の際にかかった時間は考慮せずに回答してください.</strong></font></p>
+   <br>
   <p>
    <form id="subject_personality" action="experiment1.cgi" method="POST">
           <table class="table table-striped container" style="width:1200px;">

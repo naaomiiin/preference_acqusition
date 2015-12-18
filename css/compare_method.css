@@ -138,8 +138,9 @@
   -moz-border-radius: 10px;                                                                                                                                                                                                                                  
   -webkit-animation: anim 6s;   
   margin-top: -30px;
-  margin-left: 1000px;
+  margin-left: 750px;
   width:200px;
+  position:fixed;
 }
 
 #first_system{
